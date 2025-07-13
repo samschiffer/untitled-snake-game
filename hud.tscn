@@ -1,0 +1,80 @@
+[gd_scene load_steps=2 format=3 uid="uid://83ti4gdsb118"]
+
+[ext_resource type="Script" uid="uid://wla4g5vnkkhs" path="res://hud.gd" id="1_37p78"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_37p78")
+
+[node name="Message" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -243.0
+offset_top = -233.0
+offset_right = 248.0
+offset_bottom = -96.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "Loco-Motion"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+offset_left = 665.0
+offset_top = 490.0
+offset_right = 1265.0
+offset_bottom = 790.0
+theme_override_font_sizes/font_size = 100
+text = "Start"
+icon_alignment = 1
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 9.0
+offset_right = 68.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 50
+text = "Health"
+
+[node name="ColorRect" type="ColorRect" parent="HealthLabel"]
+layout_mode = 0
+offset_top = 69.0
+offset_right = 524.0
+offset_bottom = 109.0
+color = Color(0.926095, 0.319701, 0.340658, 1)
+metadata/_edit_group_ = true
+
+[node name="ReferenceRect" type="ReferenceRect" parent="HealthLabel/ColorRect"]
+layout_mode = 0
+offset_right = 524.0
+offset_bottom = 40.0
+border_color = Color(0, 0, 0, 1)
+border_width = 5.0
+editor_only = false
+metadata/_edit_group_ = true
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 1563.0
+offset_top = 47.0
+offset_right = 1723.0
+offset_bottom = 116.0
+theme_override_font_sizes/font_size = 50
+text = "Score: "
+metadata/_edit_group_ = true
+
+[node name="Score" type="Label" parent="ScoreLabel"]
+layout_mode = 0
+offset_left = 237.0
+offset_right = 277.0
+offset_bottom = 69.0
+theme_override_font_sizes/font_size = 50
+text = "0"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

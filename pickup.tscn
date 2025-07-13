@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6r1vqj2mwntn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pu7wf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqk3k"]
+size = Vector2(22.6274, 22.6274)
+
+[node name="Pickup" type="StaticBody2D" groups=["Pickups"]]
+physics_material_override = SubResource("PhysicsMaterial_pu7wf")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 1, 0.164706, 1)
+polygon = PackedVector2Array(-16, 0, 0, -16, 16, 0, 0, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 0.785398
+shape = SubResource("RectangleShape2D_iqk3k")

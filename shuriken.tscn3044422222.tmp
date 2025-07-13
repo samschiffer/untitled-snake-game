@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsafht18ht6dm"]
+
+[ext_resource type="Script" uid="uid://cpb3e1fmd8jv6" path="res://shuriken.gd" id="1_foqx7"]
+
+[node name="Shuriken" type="Area2D"]
+script = ExtResource("1_foqx7")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 0.333333, 0.341176, 1)
+polygon = PackedVector2Array(-8, 0, -16, -16, 0, -8, 16, -16, 8, 0, 16, 16, 0, 8, -16, 16)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-16, -16, 0, -8, 16, -16, 8, 0, 16, 16, 0, 8, -16, 16, -8, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

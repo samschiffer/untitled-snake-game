@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://mfdovouyxeg"]
+
+[ext_resource type="Script" uid="uid://bwi52rc7hxkqa" path="res://new_train_car.gd" id="1_2qilt"]
+[ext_resource type="Texture2D" uid="uid://ro5grhniivhl" path="res://assets/traintest.png" id="2_yyfsr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ursn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_yyfsr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v0ym0"]
+size = Vector2(50, 70)
+
+[node name="TrainCar" type="Area2D"]
+script = ExtResource("1_2qilt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_7ursn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v0ym0")
+
+[node name="Back" type="Marker2D" parent="."]
+position = Vector2(0, 55)
+
+[node name="Front" type="Marker2D" parent="."]
+position = Vector2(0, -35)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -5.0
+offset_top = 35.0
+offset_right = 5.0
+offset_bottom = 55.0
+color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

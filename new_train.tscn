@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://dh76hogemekyt"]
+
+[ext_resource type="Script" uid="uid://cr6iljt8mgcrc" path="res://new_train.gd" id="1_xi830"]
+[ext_resource type="PackedScene" uid="uid://mfdovouyxeg" path="res://new_train_car.tscn" id="2_a4llf"]
+[ext_resource type="PackedScene" uid="uid://d3a8oi68p4mpu" path="res://new_locomotive.tscn" id="3_qqsvs"]
+
+[node name="New_Train" type="Node2D"]
+script = ExtResource("1_xi830")
+train_car_scene = ExtResource("2_a4llf")
+
+[node name="New_Locomotive" parent="." instance=ExtResource("3_qqsvs")]
+position = Vector2(851, 234)
+independent = false
+
+[node name="TrainCar" parent="." instance=ExtResource("2_a4llf")]
+position = Vector2(851, 395)
+
+[node name="Speed" type="Label" parent="."]
+offset_left = 49.0
+offset_top = 35.0
+offset_right = 135.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 50
+text = "100"
+
+[node name="EffectiveSpeed" type="Label" parent="."]
+offset_left = 1743.0
+offset_top = 69.0
+offset_right = 1829.0
+offset_bottom = 138.0
+theme_override_font_sizes/font_size = 50
+text = "100"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="locomotive_hit_edge" from="New_Locomotive" to="." method="_on_locomotive_locomotive_hit_edge"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

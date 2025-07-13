@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfd524m7thju4"]
+
+[ext_resource type="Script" uid="uid://cygi8kypix1qm" path="res://enemy.gd" id="1_7k104"]
+
+[node name="Enemy" type="Area2D" groups=["Enemies"]]
+script = ExtResource("1_7k104")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 0.52549, 0.262745, 1)
+polygon = PackedVector2Array(0, -24, -16, -16, -16, 16, 16, 16, 16, -16)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -24, 16, -16, 16, 16, -16, 16, -16, -16)
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+visible = false
+offset_left = -20.0
+offset_top = 16.0
+offset_right = 20.0
+offset_bottom = 39.0
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_timer_timeout"]
