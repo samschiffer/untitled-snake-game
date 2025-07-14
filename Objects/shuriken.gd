@@ -1,10 +1,8 @@
 extends Area2D
-class_name TrainCar
+class_name Shuriken
 
-@export var times_too_close: int = 0
-@export var current_velocity: Vector2
-
-signal train_car_hit(node: Node)
+var direction = 0
+var speed := 200
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -13,9 +11,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	var velocity: Vector2 = Vector2.UP.rotated(direction) * speed
+	position += velocity * delta
 
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is Shuriken:
-		train_car_hit.emit(self)
+	if area is Locomotive or area is TrainCar:
+		queue_free()

@@ -13,7 +13,6 @@ config_version=5
 config/name="Untitled Snake Game"
 run/main_scene="uid://1prp83njmsie"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
 
 [display]
 

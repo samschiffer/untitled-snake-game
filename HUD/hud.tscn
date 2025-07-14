@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://83ti4gdsb118"]
 
-[ext_resource type="Script" uid="uid://wla4g5vnkkhs" path="res://hud.gd" id="1_37p78"]
+[ext_resource type="Script" uid="uid://wla4g5vnkkhs" path="res://HUD/hud.gd" id="1_37p78"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_37p78")
@@ -22,7 +22,7 @@ text = "Loco-Motion"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="StartButton" type="Button" parent="."]
 offset_left = 665.0
 offset_top = 490.0
 offset_right = 1265.0
@@ -56,9 +56,6 @@ border_width = 5.0
 editor_only = false
 metadata/_edit_group_ = true
 
-[node name="Timer" type="Timer" parent="."]
-autostart = true
-
 [node name="ScoreLabel" type="Label" parent="."]
 offset_left = 1563.0
 offset_top = 47.0
@@ -76,5 +73,4 @@ offset_bottom = 69.0
 theme_override_font_sizes/font_size = 50
 text = "0"
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

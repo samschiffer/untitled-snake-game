@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://d3a8oi68p4mpu"]
+[gd_scene load_steps=5 format=3 uid="uid://d0kvyroxxjh0n"]
 
-[ext_resource type="Script" uid="uid://c0wbiag2tw6ve" path="res://new_locomotive.gd" id="1_lbdrc"]
-[ext_resource type="Texture2D" uid="uid://ro5grhniivhl" path="res://assets/traintest.png" id="2_bdwu1"]
+[ext_resource type="Script" uid="uid://bkkbrnen2wikb" path="res://Characters/Train/locomotive.gd" id="1_qygw2"]
+[ext_resource type="Texture2D" uid="uid://ro5grhniivhl" path="res://assets/traintest.png" id="2_lt4bd"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2k6pw"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_bdwu1")
+"texture": ExtResource("2_lt4bd")
 }],
 "loop": true,
 "name": &"default",
@@ -17,8 +17,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mj3ek"]
 size = Vector2(50, 69)
 
-[node name="New_Locomotive" type="Area2D"]
-script = ExtResource("1_lbdrc")
+[node name="Locomotive" type="Area2D"]
+script = ExtResource("1_qygw2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
@@ -29,14 +29,7 @@ shape = SubResource("RectangleShape2D_mj3ek")
 debug_color = Color(0, 0.6, 0.701961, 0.505882)
 
 [node name="Back" type="Marker2D" parent="."]
-position = Vector2(0, 55)
-
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -5.0
-offset_top = 35.0
-offset_right = 5.0
-offset_bottom = 55.0
-color = Color(0.0562916, 0.0562916, 0.0562916, 1)
+position = Vector2(0, 35)
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
