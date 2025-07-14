@@ -4,7 +4,7 @@ signal died
 
 @export var shoot_cooldown := 1
 @export var health := 10
-@export var bullet_scene: PackedScene = preload("res://Objects/shuriken.tscn")
+@export var bullet_scene: PackedScene = preload("res://Objects/Shuriken/shuriken.tscn")
 
 @onready var player_train := get_tree().get_first_node_in_group("Trains")
 

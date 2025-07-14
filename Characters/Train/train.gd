@@ -11,11 +11,12 @@ const TRAIN_CAR_BUFFER: float = 20 # The distance between each train car in the 
 
 @onready var train_cars: Array[TrainCar] = []
 var speed: float = 0
-var health: float = 15
+@export var max_health: float = 15
+var health: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	health = max_health
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -109,6 +110,12 @@ func move_to(pos: Vector2):
 # Handler for collecting a pickup
 func _on_locomotive_collect_pickup() -> void:
 	spawn_train()
+
+
+func _on_locomotive_collect_health_pickup() -> void:
+	health += 5
+	health = clamp(health, 0, max_health)
+	health_changed.emit()
 
 
 func lose_back_car():

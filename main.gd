@@ -1,6 +1,7 @@
 extends Node
 
-var pickup_scene: PackedScene = preload("res://Objects/pickup.tscn")
+var pickup_scene: PackedScene = preload("res://Objects/Pickup/pickup.tscn")
+var health_pickup_scene: PackedScene = preload("res://Objects/HealthPickup/health_pickup.tscn")
 var enemy_scene: PackedScene = preload("res://Characters/Enemy/enemy.tscn")
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
 var player_train: Train
@@ -56,6 +57,7 @@ func start_game():
 	
 	# Start the timers for spawning new pickups and enemies
 	$PickupSpawnTimer.start()
+	$HealthPickupSpawnTimer.start()
 	$EnemySpawnTimer.start()
 
 
@@ -102,12 +104,26 @@ func _on_enemy_death():
 	$HUD.update_score(score)
 
 
+func _on_health_pickup_spawn_timer_timeout() -> void:
+	spawn_health_pickup()
+
+
+func spawn_health_pickup():
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var rand_x: float = randf_range(20.0, viewport_size.x - 20.0)
+	var rand_y: float = randf_range(20.0, viewport_size.y - 20.0)
+	var new_pickup: Area2D = health_pickup_scene.instantiate()
+	new_pickup.position = Vector2(rand_x, rand_y)
+	add_child(new_pickup)
+
+
 func _on_train_died() -> void:
 	game_over()
 
 
 func game_over():
 	$PickupSpawnTimer.stop()
+	$HealthPickupSpawnTimer.stop()
 	$EnemySpawnTimer.stop()
 	$HUD.show_game_over()
 	

@@ -4,6 +4,7 @@ class_name Locomotive
 @export var independent: bool = true
 
 signal collect_pickup
+signal collect_health_pickup
 signal locomotive_hit
 
 const FRICTION: float = 2
@@ -72,3 +73,7 @@ func _on_area_entered(area: Area2D) -> void:
 		area.hide()
 		area.queue_free()
 		collect_pickup.emit()
+	if area is HealthPickup:
+		area.hide()
+		area.queue_free()
+		collect_health_pickup.emit()
