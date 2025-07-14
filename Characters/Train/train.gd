@@ -76,7 +76,7 @@ func spawn_train():
 	
 	# Create the new car and find the length from the center to the front
 	var new_train_car = train_car_scene.instantiate()
-	new_train_car.train_car_hit.connect(_on_train_car_hit)
+	new_train_car.train_car_death.connect(_on_train_car_death)
 	var car_center_to_front_len = (new_train_car.get_node("Front").position - new_train_car.position).length()
 	
 	# Get the last train car in the train
@@ -134,7 +134,7 @@ func _on_locomotive_locomotive_hit() -> void:
 		queue_free()
 
 
-func _on_train_car_hit(train_car: Node):
+func _on_train_car_death(train_car: Node):
 	var train_car_hit_index: int = train_cars.find(train_car)
 	remove_trains_after_index(train_car_hit_index)
 
