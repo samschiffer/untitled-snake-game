@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dh76hogemekyt"]
 
-[ext_resource type="Script" uid="uid://cr6iljt8mgcrc" path="res://new_train.gd" id="1_xi830"]
-[ext_resource type="PackedScene" uid="uid://mfdovouyxeg" path="res://new_train_car.tscn" id="2_a4llf"]
-[ext_resource type="PackedScene" uid="uid://d3a8oi68p4mpu" path="res://new_locomotive.tscn" id="3_qqsvs"]
+[ext_resource type="Script" uid="uid://cr6iljt8mgcrc" path="res://Alternate Train/new_train.gd" id="1_xi830"]
+[ext_resource type="PackedScene" uid="uid://mfdovouyxeg" path="res://Alternate Train/new_train_car.tscn" id="2_a4llf"]
+[ext_resource type="PackedScene" uid="uid://d3a8oi68p4mpu" path="res://Alternate Train/new_locomotive.tscn" id="3_qqsvs"]
 
 [node name="New_Train" type="Node2D"]
 script = ExtResource("1_xi830")
