@@ -131,3 +131,4 @@ func game_over():
 	
 	get_tree().call_group("Enemies", "queue_free")
 	get_tree().call_group("Pickups", "queue_free")
+	get_tree().call_group("HealthPickups", "queue_free")
