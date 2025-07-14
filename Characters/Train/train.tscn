@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5othik3xlmjy"]
+
+[ext_resource type="Script" uid="uid://bo35dgqmx2ji" path="res://Characters/Train/train.gd" id="1_s6wrb"]
+[ext_resource type="PackedScene" uid="uid://chwahrmpg8vha" path="res://Characters/Train/train_car.tscn" id="2_dxtx4"]
+[ext_resource type="PackedScene" uid="uid://d0kvyroxxjh0n" path="res://Characters/Train/locomotive.tscn" id="3_rat1f"]
+
+[node name="Train" type="Node2D" groups=["Trains"]]
+script = ExtResource("1_s6wrb")
+train_car_scene = ExtResource("2_dxtx4")
+
+[node name="Locomotive" parent="." instance=ExtResource("3_rat1f")]
+independent = false
+
+[node name="HealthLabel" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+text = "40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="collect_pickup" from="Locomotive" to="." method="_on_locomotive_collect_pickup"]
+[connection signal="locomotive_hit" from="Locomotive" to="." method="_on_locomotive_locomotive_hit"]
