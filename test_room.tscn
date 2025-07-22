@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcs1um8yb6wr8"]
+
+[ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="1_aiegb"]
+[ext_resource type="PackedScene" uid="uid://c6r1vqj2mwntn" path="res://Objects/Pickup/pickup.tscn" id="3_ju58f"]
+[ext_resource type="PackedScene" uid="uid://bbfp47w6mdxfe" path="res://Objects/HealthPickup/health_pickup.tscn" id="4_sqxie"]
+[ext_resource type="PackedScene" uid="uid://bfd524m7thju4" path="res://Characters/Enemy/enemy.tscn" id="5_sqxie"]
+
+[node name="TestRoom" type="Node"]
+
+[node name="Train" parent="." instance=ExtResource("1_aiegb")]
+
+[node name="Pickup" parent="." instance=ExtResource("3_ju58f")]
+position = Vector2(1008, 472)
+
+[node name="HealthPickup" parent="." instance=ExtResource("4_sqxie")]
+position = Vector2(552, 664)
+
+[node name="Enemy" parent="." instance=ExtResource("5_sqxie")]
+position = Vector2(1488, 848)
+
+[node name="Enemy2" parent="." instance=ExtResource("5_sqxie")]
+position = Vector2(712, 812)

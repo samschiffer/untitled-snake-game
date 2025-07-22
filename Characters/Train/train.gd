@@ -30,7 +30,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("spawn_train"):
 		print("F pressed")
 		spawn_train()
-		
+
+
+func _physics_process(delta: float) -> void:
 	$Locomotive.move(delta)
 	move_train_cars(delta)
 
@@ -38,7 +40,7 @@ func _process(delta: float) -> void:
 # Move all of the train cars
 func move_train_cars(delta):
 	for index in train_cars.size():
-		var next_car: Area2D
+		var next_car: CollisionObject2D
 		if index == 0:
 			next_car = $Locomotive
 		else:
@@ -80,7 +82,7 @@ func spawn_train():
 	var car_center_to_front_len = (new_train_car.get_node("Front").position - new_train_car.position).length()
 	
 	# Get the last train car in the train
-	var last_train_car: Area2D
+	var last_train_car: CollisionObject2D
 	if train_cars.size() > 0:
 		last_train_car = train_cars.back()
 	else:

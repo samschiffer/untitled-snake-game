@@ -17,7 +17,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mj3ek"]
 size = Vector2(50, 69)
 
-[node name="Locomotive" type="Area2D"]
+[node name="Locomotive" type="CharacterBody2D"]
 script = ExtResource("1_qygw2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -30,6 +30,3 @@ debug_color = Color(0, 0.6, 0.701961, 0.505882)
 
 [node name="Back" type="Marker2D" parent="."]
 position = Vector2(0, 35)
-
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

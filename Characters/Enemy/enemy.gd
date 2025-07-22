@@ -8,7 +8,7 @@ signal died
 
 @onready var player_train := get_tree().get_first_node_in_group("Trains")
 
-var colliding_cars: Array[Area2D] = []
+var colliding_cars: Array[CollisionObject2D] = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -47,15 +47,27 @@ func shoot():
 
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is Locomotive or area is TrainCar:
+	if area is TrainCar:
 		colliding_cars.append(area)
 		$ShootTimer.set_paused(true)
 		hit()
 
 
 func _on_area_exited(area: Area2D) -> void:
-	if area is Locomotive or area is TrainCar:
+	if area is TrainCar:
 		colliding_cars.remove_at(colliding_cars.find(area))
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is Locomotive:
+		colliding_cars.append(body)
+		$ShootTimer.set_paused(true)
+		hit()
+
+
+func _on_body_exited(body: Node2D) -> void:
+	if body is Locomotive:
+		colliding_cars.remove_at(colliding_cars.find(body))
 
 
 func hit():
