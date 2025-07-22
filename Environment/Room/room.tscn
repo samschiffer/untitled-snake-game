@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7300t7pcof2s"]
+
+[ext_resource type="Script" uid="uid://dif2hvxsnybw2" path="res://Environment/Room/room.gd" id="1_jnxyn"]
+[ext_resource type="PackedScene" uid="uid://dgvaaghik8aup" path="res://Environment/wall.tscn" id="2_53bd7"]
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_jnxyn")
+
+[node name="Floor" type="Polygon2D" parent="."]
+scale = Vector2(2000, 1500)
+color = Color(0.105882, 0.490196, 1, 1)
+polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
+
+[node name="Top Wall" parent="." instance=ExtResource("2_53bd7")]
+scale = Vector2(2000, 20)
+
+[node name="Left Wall" parent="." instance=ExtResource("2_53bd7")]
+scale = Vector2(20, 1500)
+
+[node name="Bottom Wall" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(1.13687e-13, 1480)
+scale = Vector2(2000, 20)
+
+[node name="Right Wall" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(1980, 0)
+scale = Vector2(20, 1500)
