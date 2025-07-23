@@ -15,6 +15,14 @@ var room_height: float
 
 # Scoring variables
 var score: int = 0
+var level: int = 1
+
+# Objectives
+var objectives: Array[String] = ["enemies", "time", "score"]
+var current_objective: String
+var objective_progress: float = 0
+var objective_goal: float
+var objective_completed: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,7 +34,13 @@ func _process(delta: float) -> void:
 	## Debugging Mouse Position
 	#if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		#print("Mouse position", get_viewport().get_mouse_position())
-	pass
+	if Input.is_action_just_pressed("test_action"):
+		pass
+	if current_objective == "time":
+		objective_progress = snapped($SurviveTimer.time_left, 0.1)
+		$HUD.update_objective_progress(objective_progress)
+	if not objective_completed and is_objective_complete():
+		complete_objective()
 
 
 func _on_hud_start_game() -> void:
@@ -42,6 +56,12 @@ func create_room():
 func start_game():
 	# Reset score
 	score = 0
+	
+	# Reset level
+	level = 1
+	
+	# Set objective
+	get_new_objective()
 	
 	room_width = current_room.bounding_box.x
 	room_height = current_room.bounding_box.y
@@ -61,6 +81,7 @@ func start_game():
 	$HUD.update_max_health(player_train.health)
 	$HUD.update_current_health(player_train.health)
 	$HUD.update_score(0)
+	$HUD.update_level(level)
 	
 	# Show the player
 	player_train.show()
@@ -76,6 +97,60 @@ func start_game():
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$EnemySpawnTimer.start()
+
+
+func get_new_objective():
+	# Don't repeat the same objective twice
+	var objectives_choices: Array[String] = objectives.duplicate()
+	objectives_choices.erase(current_objective)
+	
+	current_objective = objectives_choices.pick_random()
+	
+	match current_objective:
+		"time":
+			start_survive_timer(10)
+		"enemies":
+			objective_progress = 0
+			objective_goal = 3
+		"score":
+			objective_progress = 0
+			objective_goal = 200
+			
+	objective_completed = false
+	
+	$HUD.update_objective(current_objective)
+	$HUD.update_objective_progress(objective_progress, objective_goal)
+
+
+func is_objective_complete():
+	if current_objective in ["enemies", "score"]:
+		return objective_progress >= objective_goal
+	elif current_objective in ["time"]:
+		return objective_progress <= objective_goal
+	else:
+		return false
+
+
+func complete_objective():
+	level += 1
+	increment_score(500)
+	$HUD.update_level(level)
+	get_new_objective()
+
+
+func increment_score(amount: int):
+	score += amount
+	$HUD.update_score(score)
+	if current_objective == "score":
+		objective_progress += amount
+		$HUD.update_objective_progress(objective_progress)
+
+
+func start_survive_timer(survive_time):
+	objective_progress = survive_time
+	objective_goal = 0
+	$SurviveTimer.wait_time = survive_time
+	$SurviveTimer.start()
 
 
 func _on_health_changed():
@@ -97,9 +172,8 @@ func spawn_pickup():
 
 
 func _on_collect_pickup():
-	score += 20
-	$HUD.update_score(score)
-	
+	increment_score(20)
+
 
 func _on_enemy_spawn_timer_timeout() -> void:
 	spawn_enemy()
@@ -117,8 +191,10 @@ func spawn_enemy():
 
 
 func _on_enemy_death():
-	score += 100
-	$HUD.update_score(score)
+	increment_score(100)
+	if current_objective == "enemies":
+		objective_progress += 1
+		$HUD.update_objective_progress(objective_progress)
 
 
 func _on_health_pickup_spawn_timer_timeout() -> void:
