@@ -15,6 +15,9 @@ wait_time = 9.0
 [node name="HealthPickupSpawnTimer" type="Timer" parent="."]
 wait_time = 7.0
 
+[node name="SurviveTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="HUD" parent="." instance=ExtResource("5_lquwl")]
 
 [connection signal="timeout" from="PickupSpawnTimer" to="." method="_on_pickup_timer_timeout"]
