@@ -29,9 +29,9 @@ func _process(delta: float) -> void:
 
 func move(delta: float):
 	if not movement_locked:
-		# Decrese speed based on friction
+		# Decrease speed based on friction
 		speed -= FRICTION
-		# Increase or decrese speed
+		# Increase or decrease speed
 		if Input.is_action_pressed("move_up"):
 			speed += 5
 		if Input.is_action_pressed("move_down"):
