@@ -9,7 +9,7 @@ var room_scene: PackedScene = preload("res://Environment/Room/room.tscn")
 var player_train: Train
 
 # Current Room variables
-var current_room
+var current_room: Room
 var room_width: float
 var room_height: float
 
@@ -24,6 +24,10 @@ var objective_progress: float = 0
 var objective_goal: float
 var objective_completed: bool = false
 
+# Camera controls
+var camera_buffer = 200
+var camera_follow_player: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -31,6 +35,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# Make the camera follow the player
+	if camera_follow_player == true and player_train != null:
+		$Camera2D.position = player_train.get_node("Locomotive").position
 	## Debugging Mouse Position
 	#if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		#print("Mouse position", get_viewport().get_mouse_position())
@@ -38,7 +45,8 @@ func _process(delta: float) -> void:
 		pass
 	if current_objective == "time":
 		objective_progress = snapped($SurviveTimer.time_left, 0.1)
-		$HUD.update_objective_progress(objective_progress)
+		if not objective_completed:
+			$HUD.update_objective_progress(objective_progress)
 	if not objective_completed and is_objective_complete():
 		complete_objective()
 
@@ -50,10 +58,19 @@ func create_room():
 	# Create room
 	current_room = room_scene.instantiate()
 	current_room.ready.connect(start_game)
+	current_room.train_entered_room.connect(_on_room_train_entered_room)
+	current_room.train_left_room.connect(_on_room_train_left_room)
 	add_child(current_room)
 	
 
 func start_game():
+	# Set camera limits
+	$Camera2D.limit_left = current_room.position.x - camera_buffer
+	$Camera2D.limit_top = current_room.position.y - camera_buffer
+	$Camera2D.limit_right =  current_room.position.x + current_room.bounding_box.x + camera_buffer
+	$Camera2D.limit_bottom =  current_room.position.y + current_room.bounding_box.y + camera_buffer
+	camera_follow_player = true
+	
 	# Reset score
 	score = 0
 	
@@ -132,16 +149,34 @@ func is_objective_complete():
 
 
 func complete_objective():
-	level += 1
+	# Complete objective
+	objective_completed = true
+	$HUD.update_objective_complete()
+	
+	# Give player points for completing
 	increment_score(500)
-	$HUD.update_level(level)
-	get_new_objective()
+	
+	# Stop spawning enemies and pickups
+	$PickupSpawnTimer.stop()
+	$HealthPickupSpawnTimer.stop()
+	$EnemySpawnTimer.stop()
+	
+	# Open the doors so they can move to the next level
+	open_doors()
+
+
+func open_doors():
+	if player_train != null:
+		current_room.get_node("DoorTop").open_for(player_train.get_node("Locomotive"))
+		current_room.get_node("DoorLeft").open_for(player_train.get_node("Locomotive"))
+		current_room.get_node("DoorRight").open_for(player_train.get_node("Locomotive"))
+		current_room.get_node("DoorBottom").open_for(player_train.get_node("Locomotive"))
 
 
 func increment_score(amount: int):
 	score += amount
 	$HUD.update_score(score)
-	if current_objective == "score":
+	if current_objective == "score" and not objective_completed:
 		objective_progress += amount
 		$HUD.update_objective_progress(objective_progress)
 
@@ -192,7 +227,7 @@ func spawn_enemy():
 
 func _on_enemy_death():
 	increment_score(100)
-	if current_objective == "enemies":
+	if current_objective == "enemies" and not objective_completed:
 		objective_progress += 1
 		$HUD.update_objective_progress(objective_progress)
 
@@ -222,7 +257,74 @@ func game_over():
 	
 	await get_tree().create_timer(3.0).timeout
 	
+	clear_room()
+	current_room.queue_free()
+
+
+func clear_room():
 	get_tree().call_group("Enemies", "queue_free")
 	get_tree().call_group("Pickups", "queue_free")
 	get_tree().call_group("HealthPickups", "queue_free")
-	current_room.queue_free()
+
+
+## Room Movement Code
+func _on_room_train_left_room(from_direction: String) -> void:
+	$Transition.fade()
+	player_train.get_node("Locomotive").speed = 0
+	go_to_next_room(from_direction)
+
+
+func _on_room_train_entered_room(train: Train) -> void:
+	# Close the doors
+	current_room.get_node("DoorTop").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorLeft").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorBottom").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorRight").close_for(player_train.get_node("Locomotive"))
+	
+	# Unlock the player movement
+	player_train.get_node("Locomotive").movement_locked = false
+	
+	# Start the enemy and pickup spawners
+	$PickupSpawnTimer.start()
+	$HealthPickupSpawnTimer.start()
+	$EnemySpawnTimer.start()
+
+
+func go_to_next_room(from_direction: String):
+	await get_tree().create_timer(2.0).timeout ## TODO: Add signals to animation completing to control this behavior
+	clear_room()
+	level += 1
+	$HUD.update_level(level)
+	get_new_objective()
+	
+	# Move the player outside of the correct door based on which door they exited the last room from
+	match from_direction:
+		"top":
+			# Go to the bottom
+			player_train.get_node("Locomotive").rotation = 0
+			player_train.move_to(Vector2(current_room.get_node("ExitBottom").position.x, current_room.get_node("ExitBottom").position.y + 40))
+			$Camera2D.position = current_room.get_node("ExitBottom").position
+			$Camera2D.reset_smoothing()
+		"left":
+			# Go to the right
+			player_train.get_node("Locomotive").rotation = (3 * PI) / 2.0
+			player_train.move_to(Vector2(current_room.get_node("ExitRight").position.x + 40, current_room.get_node("ExitRight").position.y))
+			$Camera2D.position = current_room.get_node("ExitRight").position
+			$Camera2D.reset_smoothing()
+		"bottom":
+			# Go to the top
+			player_train.get_node("Locomotive").rotation = PI
+			player_train.move_to(Vector2(current_room.get_node("ExitTop").position.x, current_room.get_node("ExitTop").position.y - 40))
+			$Camera2D.position = current_room.get_node("ExitTop").position
+			$Camera2D.reset_smoothing()
+		"right":
+			# Go to the left
+			player_train.get_node("Locomotive").rotation = PI / 2
+			player_train.move_to(Vector2(current_room.get_node("ExitLeft").position.x - 40, current_room.get_node("ExitLeft").position.y))
+			$Camera2D.position = current_room.get_node("ExitLeft").position
+			$Camera2D.reset_smoothing()
+	
+	current_room.check_for_train_entered(player_train)
+	player_train.get_node("Locomotive").show()
+	player_train.get_node("Locomotive").speed = 600
+	$Transition.unfade()

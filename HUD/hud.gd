@@ -79,5 +79,8 @@ func update_objective_progress(progress, goal = null):
 		$ObjectiveLabel.text = objective_name_map[current_objective] + " " + objective_progress + "/" + objective_goal
 
 
+func update_objective_complete():
+	$ObjectiveLabel.text = "Objective Complete!"
+
 func update_level(level):
 	$LevelLabel.text = "Level: " + str(level)

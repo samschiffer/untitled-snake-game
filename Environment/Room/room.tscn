@@ -1,9 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7300t7pcof2s"]
+[gd_scene load_steps=9 format=3 uid="uid://b7300t7pcof2s"]
 
 [ext_resource type="Script" uid="uid://dif2hvxsnybw2" path="res://Environment/Room/room.gd" id="1_jnxyn"]
 [ext_resource type="PackedScene" uid="uid://dgvaaghik8aup" path="res://Environment/wall.tscn" id="2_53bd7"]
+[ext_resource type="PackedScene" uid="uid://bih3mk2eq5mfm" path="res://Environment/Door/door.tscn" id="3_53bd7"]
 
-[node name="Room" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_53bd7"]
+size = Vector2(2000, 1500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1u5or"]
+size = Vector2(200, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sxs8"]
+size = Vector2(20, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8j2pn"]
+size = Vector2(200, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3pxdj"]
+size = Vector2(17.5, 200)
+
+[node name="Room" type="Area2D"]
 script = ExtResource("1_jnxyn")
 
 [node name="Floor" type="Polygon2D" parent="."]
@@ -11,16 +27,94 @@ scale = Vector2(2000, 1500)
 color = Color(0.105882, 0.490196, 1, 1)
 polygon = PackedVector2Array(0, 0, 1, 0, 1, 1, 0, 1)
 
-[node name="Top Wall" parent="." instance=ExtResource("2_53bd7")]
-scale = Vector2(2000, 20)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1000, 750)
+shape = SubResource("RectangleShape2D_53bd7")
 
-[node name="Left Wall" parent="." instance=ExtResource("2_53bd7")]
-scale = Vector2(20, 1500)
+[node name="WallTopLeft" parent="." instance=ExtResource("2_53bd7")]
+scale = Vector2(900, 20)
 
-[node name="Bottom Wall" parent="." instance=ExtResource("2_53bd7")]
-position = Vector2(1.13687e-13, 1480)
-scale = Vector2(2000, 20)
+[node name="WallTopRight" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(1100, 0)
+scale = Vector2(900, 20)
 
-[node name="Right Wall" parent="." instance=ExtResource("2_53bd7")]
+[node name="WallLeftTop" parent="." instance=ExtResource("2_53bd7")]
+scale = Vector2(20, 650)
+
+[node name="WallLeftBottom" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(0, 850)
+scale = Vector2(20, 650)
+
+[node name="WallBottomLeft" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(0, 1480)
+scale = Vector2(900, 20)
+
+[node name="WallBottomRight" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(1100, 1480)
+scale = Vector2(900, 20)
+
+[node name="WallRightTop" parent="." instance=ExtResource("2_53bd7")]
 position = Vector2(1980, 0)
-scale = Vector2(20, 1500)
+scale = Vector2(20, 650)
+
+[node name="WallRightBottom" parent="." instance=ExtResource("2_53bd7")]
+position = Vector2(1980, 850)
+scale = Vector2(20, 650)
+
+[node name="DoorTop" parent="." instance=ExtResource("3_53bd7")]
+position = Vector2(900, 0)
+scale = Vector2(200, 20)
+
+[node name="DoorLeft" parent="." instance=ExtResource("3_53bd7")]
+position = Vector2(0, 650)
+scale = Vector2(20, 200)
+
+[node name="DoorBottom" parent="." instance=ExtResource("3_53bd7")]
+position = Vector2(900, 1480)
+scale = Vector2(200, 20)
+
+[node name="DoorRight" parent="." instance=ExtResource("3_53bd7")]
+position = Vector2(1980, 650)
+scale = Vector2(20, 200)
+
+[node name="ExitTop" type="Area2D" parent="."]
+position = Vector2(1000, -10)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitTop"]
+shape = SubResource("RectangleShape2D_1u5or")
+
+[node name="ExitLeft" type="Area2D" parent="."]
+position = Vector2(-10, 750)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitLeft"]
+shape = SubResource("RectangleShape2D_6sxs8")
+
+[node name="ExitBottom" type="Area2D" parent="."]
+position = Vector2(1000, 1510)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitBottom"]
+shape = SubResource("RectangleShape2D_8j2pn")
+
+[node name="ExitRight" type="Area2D" parent="."]
+position = Vector2(2009, 750)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitRight"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_3pxdj")
+
+[connection signal="area_entered" from="ExitTop" to="." method="_on_exit_top_area_entered"]
+[connection signal="body_entered" from="ExitTop" to="." method="_on_exit_top_body_entered"]
+[connection signal="body_exited" from="ExitTop" to="." method="_on_exit_top_body_exited"]
+[connection signal="area_entered" from="ExitLeft" to="." method="_on_exit_left_area_entered"]
+[connection signal="body_entered" from="ExitLeft" to="." method="_on_exit_left_body_entered"]
+[connection signal="body_exited" from="ExitLeft" to="." method="_on_exit_left_body_exited"]
+[connection signal="area_entered" from="ExitBottom" to="." method="_on_exit_bottom_area_entered"]
+[connection signal="body_entered" from="ExitBottom" to="." method="_on_exit_bottom_body_entered"]
+[connection signal="body_exited" from="ExitBottom" to="." method="_on_exit_bottom_body_exited"]
+[connection signal="area_entered" from="ExitRight" to="." method="_on_exit_right_area_entered"]
+[connection signal="body_entered" from="ExitRight" to="." method="_on_exit_right_body_entered"]
+[connection signal="body_exited" from="ExitRight" to="." method="_on_exit_right_body_exited"]
