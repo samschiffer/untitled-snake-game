@@ -1,22 +1,24 @@
 [gd_scene load_steps=5 format=3 uid="uid://bcs1um8yb6wr8"]
 
 [ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="1_aiegb"]
-[ext_resource type="PackedScene" uid="uid://c6r1vqj2mwntn" path="res://Objects/Pickup/pickup.tscn" id="3_ju58f"]
-[ext_resource type="PackedScene" uid="uid://bbfp47w6mdxfe" path="res://Objects/HealthPickup/health_pickup.tscn" id="4_sqxie"]
-[ext_resource type="PackedScene" uid="uid://bfd524m7thju4" path="res://Characters/Enemy/enemy.tscn" id="5_sqxie"]
+[ext_resource type="Script" uid="uid://bn0msxiycoegl" path="res://test_room.gd" id="1_ju58f"]
+[ext_resource type="PackedScene" uid="uid://b7300t7pcof2s" path="res://Environment/Room/room.tscn" id="2_arrdh"]
+[ext_resource type="PackedScene" uid="uid://c8in37b8i7qe2" path="res://HUD/Transition/transition.tscn" id="4_ju58f"]
 
 [node name="TestRoom" type="Node"]
+script = ExtResource("1_ju58f")
+
+[node name="Room" parent="." instance=ExtResource("2_arrdh")]
 
 [node name="Train" parent="." instance=ExtResource("1_aiegb")]
 
-[node name="Pickup" parent="." instance=ExtResource("3_ju58f")]
-position = Vector2(1008, 472)
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1409, 1243)
+process_callback = 0
+position_smoothing_enabled = true
+editor_draw_limits = true
 
-[node name="HealthPickup" parent="." instance=ExtResource("4_sqxie")]
-position = Vector2(552, 664)
+[node name="Transition" parent="." instance=ExtResource("4_ju58f")]
 
-[node name="Enemy" parent="." instance=ExtResource("5_sqxie")]
-position = Vector2(1488, 848)
-
-[node name="Enemy2" parent="." instance=ExtResource("5_sqxie")]
-position = Vector2(712, 812)
+[connection signal="train_entered_room" from="Room" to="." method="_on_room_train_entered_room"]
+[connection signal="train_left_room" from="Room" to="." method="_on_room_train_left_room"]

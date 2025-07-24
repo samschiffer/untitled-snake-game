@@ -9,7 +9,7 @@ signal health_changed
 const MAX_TRAIN_CARS: float = 10
 const TRAIN_CAR_BUFFER: float = 20 # The distance between each train car in the train
 
-@onready var train_cars: Array[TrainCar] = []
+var train_cars: Array[TrainCar] = []
 var speed: float = 0
 @export var max_health: float = 15
 var health: float
@@ -104,9 +104,25 @@ func add_train(new_train_car):
 	train_cars.append(new_train_car)
 
 
-# Moves the head of the train to a certain position
+# Moves the train to a certain position
 func move_to(pos: Vector2):
+	# Move head of the train to a certain position
 	$Locomotive.position = pos
+	
+	# Move all of the other trains behind the head in a straight line
+	for index in train_cars.size():
+		var current_car = train_cars[index]
+		var next_car: CollisionObject2D
+		if index == 0:
+			next_car = $Locomotive
+		else:
+			next_car = train_cars[index - 1]
+		
+		var car_center_to_front_len = (current_car.get_node("Front").global_position - current_car.global_position).length()
+		var next_car_back = next_car.get_node("Back").global_position
+		var move_point = next_car_back - Vector2.UP.rotated(next_car.rotation) * (car_center_to_front_len + TRAIN_CAR_BUFFER)
+		current_car.position = move_point
+		current_car.rotation = next_car.rotation
 
 
 # Handler for collecting a pickup
