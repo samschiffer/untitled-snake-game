@@ -24,13 +24,26 @@ var objective_progress: float = 0
 var objective_goal: float
 var objective_completed: bool = false
 
+# Objective goals
+var enemy_goal: int = 2
+var score_goal: int = 300
+var survive_goal: float = 30
+
 # Camera controls
 var camera_buffer = 200
 var camera_follow_player: bool = false
 
+# Spawn Rate vars
+var pickup_spawn_rate: float = 5.0
+var enemy_spawn_rate: float = 10.0
+var health_spawn_rate: float = 20.0
+var enemy_health: float = 10
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	$PickupSpawnTimer.wait_time = pickup_spawn_rate
+	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -77,6 +90,20 @@ func start_game():
 	# Reset level
 	level = 1
 	
+	# Reset spawn rates
+	pickup_spawn_rate = 5.0
+	enemy_spawn_rate = 10.0
+	health_spawn_rate = 20.0
+	
+	$PickupSpawnTimer.wait_time = pickup_spawn_rate
+	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
+	
+	# Reset objective goals
+	enemy_goal = 2
+	score_goal = 300
+	survive_goal = 30
+
 	# Set objective
 	get_new_objective()
 	
@@ -125,13 +152,16 @@ func get_new_objective():
 	
 	match current_objective:
 		"time":
-			start_survive_timer(10)
+			start_survive_timer(survive_goal)
+			survive_goal += 5
 		"enemies":
 			objective_progress = 0
-			objective_goal = 3
+			objective_goal = enemy_goal
+			enemy_goal += 1
 		"score":
 			objective_progress = 0
-			objective_goal = 200
+			objective_goal = score_goal
+			score_goal += 100
 			
 	objective_completed = false
 	
@@ -220,6 +250,7 @@ func spawn_enemy():
 	var rand_x: float = randf_range(80.0, room_width - 80.0)
 	var rand_y: float = randf_range(80.0, room_height - 80.0)
 	var new_enemy: Area2D = enemy_scene.instantiate()
+	new_enemy.health = enemy_health
 	new_enemy.position = Vector2(rand_x, rand_y)
 	new_enemy.died.connect(_on_enemy_death)
 	add_child(new_enemy)
@@ -288,13 +319,20 @@ func _on_room_train_entered_room(train: Train) -> void:
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$EnemySpawnTimer.start()
+	
+	# Initial spawns in room
+	await get_tree().create_timer(2.0).timeout
+	spawn_pickup()
+	spawn_pickup()
+	spawn_pickup()
+	spawn_enemy()
+	spawn_enemy()
 
 
 func go_to_next_room(from_direction: String):
 	await get_tree().create_timer(2.0).timeout ## TODO: Add signals to animation completing to control this behavior
 	clear_room()
-	level += 1
-	$HUD.update_level(level)
+	increase_level()
 	get_new_objective()
 	
 	# Move the player outside of the correct door based on which door they exited the last room from
@@ -328,3 +366,19 @@ func go_to_next_room(from_direction: String):
 	player_train.get_node("Locomotive").show()
 	player_train.get_node("Locomotive").speed = 600
 	$Transition.unfade()
+
+
+func increase_level():
+	level += 1
+	$HUD.update_level(level)
+	
+	pickup_spawn_rate += 0.5
+	enemy_spawn_rate -= 0.25
+	health_spawn_rate += 0.5
+	
+	$PickupSpawnTimer.wait_time = pickup_spawn_rate
+	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
+	
+	if level % 3 == 0:
+		enemy_health += 2
