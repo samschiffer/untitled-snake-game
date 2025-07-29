@@ -4,6 +4,7 @@ extends Node
 var pickup_scene: PackedScene = preload("res://Objects/Pickup/pickup.tscn")
 var health_pickup_scene: PackedScene = preload("res://Objects/HealthPickup/health_pickup.tscn")
 var enemy_scene: PackedScene = preload("res://Characters/Enemy/enemy.tscn")
+var wanderer_scene: PackedScene = preload("res://Characters/Wanderer/wanderer.tscn")
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
 var room_scene: PackedScene = preload("res://Environment/Room/room.tscn")
 var player_train: Train
@@ -136,11 +137,13 @@ func start_game():
 	spawn_pickup()
 	spawn_enemy()
 	spawn_enemy()
+	spawn_wanderer()
 	
 	# Start the timers for spawning new pickups and enemies
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$EnemySpawnTimer.start()
+	$WandererSpawnTimer.start()
 
 
 func get_new_objective():
@@ -190,6 +193,7 @@ func complete_objective():
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
 	$EnemySpawnTimer.stop()
+	$WandererSpawnTimer.stop()
 	
 	# Open the doors so they can move to the next level
 	open_doors()
@@ -263,6 +267,22 @@ func _on_enemy_death():
 		$HUD.update_objective_progress(objective_progress)
 
 
+func _on_wanderer_spawn_timer_timeout() -> void:
+	spawn_wanderer()
+
+
+# Spawns an enemy at a random location on the screen
+func spawn_wanderer():
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var rand_x: float = randf_range(80.0, room_width - 80.0)
+	var rand_y: float = randf_range(80.0, room_height - 80.0)
+	var new_wanderer: Area2D = wanderer_scene.instantiate()
+	new_wanderer.health = 7
+	new_wanderer.position = Vector2(rand_x, rand_y)
+	new_wanderer.died.connect(_on_enemy_death)
+	add_child(new_wanderer)
+
+
 func _on_health_pickup_spawn_timer_timeout() -> void:
 	spawn_health_pickup()
 
@@ -284,6 +304,7 @@ func game_over():
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
 	$EnemySpawnTimer.stop()
+	$WandererSpawnTimer.stop()
 	$HUD.show_game_over()
 	
 	await get_tree().create_timer(3.0).timeout
@@ -294,6 +315,7 @@ func game_over():
 
 func clear_room():
 	get_tree().call_group("Enemies", "queue_free")
+	get_tree().call_group("Wanderers", "queue_free")
 	get_tree().call_group("Pickups", "queue_free")
 	get_tree().call_group("HealthPickups", "queue_free")
 
@@ -319,6 +341,7 @@ func _on_room_train_entered_room(train: Train) -> void:
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$EnemySpawnTimer.start()
+	$WandererSpawnTimer.start()
 	
 	# Initial spawns in room
 	await get_tree().create_timer(2.0).timeout
@@ -327,6 +350,7 @@ func _on_room_train_entered_room(train: Train) -> void:
 	spawn_pickup()
 	spawn_enemy()
 	spawn_enemy()
+	spawn_wanderer()
 
 
 func go_to_next_room(from_direction: String):

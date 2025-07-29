@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn4xv0oc4t7t6"]
+
+[ext_resource type="Script" uid="uid://j0nvj7j1hyd6" path="res://Characters/Wanderer/wanderer.gd" id="1_4x8yr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rmbjh"]
+size = Vector2(32, 40)
+
+[node name="Wanderer" type="Area2D" groups=["Wanderers"]]
+script = ExtResource("1_4x8yr")
+
+[node name="Polygon2D" type="Polygon2D" parent="." groups=["Wanderers"]]
+position = Vector2(0, -8)
+color = Color(0.741294, 0.289576, 0.576194, 1)
+polygon = PackedVector2Array(-8, -16, -8, -8, -16, -8, -16, 0, -16, 24, 16, 24, 16, -8, 8, -8, 8, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_rmbjh")
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, -350)
+
+[node name="ShootTimeLabel" type="Label" parent="."]
+visible = false
+offset_left = -8.0
+offset_top = 16.0
+offset_right = 32.0
+offset_bottom = 39.0
+text = "2.0"
+
+[node name="HealthLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -11.5
+offset_right = 10.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "10"
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
