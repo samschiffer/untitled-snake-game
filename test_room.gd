@@ -25,6 +25,15 @@ func _process(delta: float) -> void:
 		$Room/DoorLeft.open_for($Train/Locomotive)
 		$Room/DoorBottom.open_for($Train/Locomotive)
 		$Room/DoorRight.open_for($Train/Locomotive)
+		#
+	#if Input.is_action_pressed("move_down"):
+		#$Camera2D.position.y += 10
+	#if Input.is_action_pressed("move_up"):
+		#$Camera2D.position.y -= 10
+	#if Input.is_action_pressed("move_left"):
+		#$Camera2D.position.x -= 10
+	#if Input.is_action_pressed("move_right"):
+		#$Camera2D.position.x += 10
 
 
 func _on_room_train_left_room(from_direction: String) -> void:
@@ -76,3 +85,7 @@ func go_to_next_room(from_direction: String):
 	$Train/Locomotive.show()
 	$Train/Locomotive.speed = 450
 	$Transition.unfade()
+
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	pass # Replace with function body.

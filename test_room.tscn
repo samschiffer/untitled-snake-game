@@ -1,24 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcs1um8yb6wr8"]
+[gd_scene load_steps=6 format=3 uid="uid://bcs1um8yb6wr8"]
 
-[ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="1_aiegb"]
 [ext_resource type="Script" uid="uid://bn0msxiycoegl" path="res://test_room.gd" id="1_ju58f"]
 [ext_resource type="PackedScene" uid="uid://b7300t7pcof2s" path="res://Environment/Room/room.tscn" id="2_arrdh"]
 [ext_resource type="PackedScene" uid="uid://c8in37b8i7qe2" path="res://HUD/Transition/transition.tscn" id="4_ju58f"]
+[ext_resource type="PackedScene" uid="uid://bn4xv0oc4t7t6" path="res://Characters/Wanderer/wanderer.tscn" id="4_sqxie"]
+[ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="5_sqxie"]
 
 [node name="TestRoom" type="Node"]
 script = ExtResource("1_ju58f")
 
 [node name="Room" parent="." instance=ExtResource("2_arrdh")]
 
-[node name="Train" parent="." instance=ExtResource("1_aiegb")]
+[node name="Transition" parent="." instance=ExtResource("4_ju58f")]
+
+[node name="Wanderer" parent="." instance=ExtResource("4_sqxie")]
+position = Vector2(990, 183)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1409, 1243)
+position = Vector2(1015, 650)
 process_callback = 0
-position_smoothing_enabled = true
 editor_draw_limits = true
 
-[node name="Transition" parent="." instance=ExtResource("4_ju58f")]
+[node name="Wanderer2" parent="." instance=ExtResource("4_sqxie")]
+position = Vector2(1217, 191)
+
+[node name="Train" parent="." instance=ExtResource("5_sqxie")]
 
 [connection signal="train_entered_room" from="Room" to="." method="_on_room_train_entered_room"]
 [connection signal="train_left_room" from="Room" to="." method="_on_room_train_left_room"]
