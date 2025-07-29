@@ -328,12 +328,6 @@ func _on_room_train_left_room(from_direction: String) -> void:
 
 
 func _on_room_train_entered_room(train: Train) -> void:
-	# Close the doors
-	current_room.get_node("DoorTop").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorLeft").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorBottom").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorRight").close_for(player_train.get_node("Locomotive"))
-	
 	# Unlock the player movement
 	player_train.get_node("Locomotive").movement_locked = false
 	
@@ -343,8 +337,17 @@ func _on_room_train_entered_room(train: Train) -> void:
 	$EnemySpawnTimer.start()
 	$WandererSpawnTimer.start()
 	
+	# Close the doors
+	await get_tree().create_timer(1.0).timeout
+
+	current_room.get_node("DoorTop").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorLeft").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorBottom").close_for(player_train.get_node("Locomotive"))
+	current_room.get_node("DoorRight").close_for(player_train.get_node("Locomotive"))
+	
 	# Initial spawns in room
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(1.0).timeout
+	
 	spawn_pickup()
 	spawn_pickup()
 	spawn_pickup()
