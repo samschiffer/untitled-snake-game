@@ -44,12 +44,13 @@ func _on_room_train_left_room(from_direction: String) -> void:
 
 
 func _on_room_train_entered_room(train: Train) -> void:
+	$Train/Locomotive.speed = 600
+	$Train/Locomotive.movement_locked = false
+	await get_tree().create_timer(0.5).timeout
 	$Room/DoorTop.close_for($Train/Locomotive)
 	$Room/DoorLeft.close_for($Train/Locomotive)
 	$Room/DoorBottom.close_for($Train/Locomotive)
 	$Room/DoorRight.close_for($Train/Locomotive)
-	$Train/Locomotive.speed = 600
-	$Train/Locomotive.movement_locked = false
 
 
 func go_to_next_room(from_direction: String):

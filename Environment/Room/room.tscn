@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bih3mk2eq5mfm" path="res://Environment/Door/door.tscn" id="3_53bd7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_53bd7"]
-size = Vector2(2000, 1500)
+size = Vector2(1960, 1461)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1u5or"]
 size = Vector2(200, 20)
