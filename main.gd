@@ -3,6 +3,7 @@ extends Node
 # Scenes to load
 var pickup_scene: PackedScene = preload("res://Objects/Pickup/pickup.tscn")
 var health_pickup_scene: PackedScene = preload("res://Objects/HealthPickup/health_pickup.tscn")
+var weapon_pickup_scene: PackedScene = preload("res://Objects/WeaponPickup/weapon_pickup.tscn")
 var enemy_scene: PackedScene = preload("res://Characters/Enemy/enemy.tscn")
 var wanderer_scene: PackedScene = preload("res://Characters/Wanderer/wanderer.tscn")
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
@@ -38,6 +39,7 @@ var camera_follow_player: bool = false
 var pickup_spawn_rate: float = 5.0
 var enemy_spawn_rate: float = 10.0
 var health_spawn_rate: float = 20.0
+var weapon_spawn_rate: float = 5.0
 var enemy_health: float = 10
 
 # Called when the node enters the scene tree for the first time.
@@ -45,6 +47,7 @@ func _ready() -> void:
 	$PickupSpawnTimer.wait_time = pickup_spawn_rate
 	$EnemySpawnTimer.wait_time = enemy_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
+	$WeaponPickupTimer.wait_time = weapon_spawn_rate
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -99,6 +102,7 @@ func start_game():
 	$PickupSpawnTimer.wait_time = pickup_spawn_rate
 	$EnemySpawnTimer.wait_time = enemy_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
+	$WeaponPickupTimer.wait_time = weapon_spawn_rate
 	
 	# Reset objective goals
 	enemy_goal = 2
@@ -142,6 +146,7 @@ func start_game():
 	# Start the timers for spawning new pickups and enemies
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
+	$WeaponPickupTimer.start()
 	$EnemySpawnTimer.start()
 	$WandererSpawnTimer.start()
 
@@ -192,6 +197,7 @@ func complete_objective():
 	# Stop spawning enemies and pickups
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
+	$WeaponPickupTimer.stop()
 	$EnemySpawnTimer.stop()
 	$WandererSpawnTimer.stop()
 	
@@ -296,6 +302,19 @@ func spawn_health_pickup():
 	add_child(new_pickup)
 
 
+func _on_weapon_pickup_timer_timeout() -> void:
+	spawn_weapon_pickup()
+
+
+func spawn_weapon_pickup():
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var rand_x: float = randf_range(60.0, room_width - 60.0)
+	var rand_y: float = randf_range(60.0, room_height - 60.0)
+	var new_pickup: Area2D = weapon_pickup_scene.instantiate()
+	new_pickup.position = Vector2(rand_x, rand_y)
+	add_child(new_pickup)
+
+
 func _on_train_died() -> void:
 	game_over()
 
@@ -303,6 +322,7 @@ func _on_train_died() -> void:
 func game_over():
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
+	$WeaponPickupTimer.stop()
 	$EnemySpawnTimer.stop()
 	$WandererSpawnTimer.stop()
 	$HUD.show_game_over()
@@ -318,6 +338,7 @@ func clear_room():
 	get_tree().call_group("Wanderers", "queue_free")
 	get_tree().call_group("Pickups", "queue_free")
 	get_tree().call_group("HealthPickups", "queue_free")
+	get_tree().call_group("WeaponPickups", "queue_free")
 
 
 ## Room Movement Code
@@ -334,6 +355,7 @@ func _on_room_train_entered_room(train: Train) -> void:
 	# Start the enemy and pickup spawners
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
+	$WeaponPickupTimer.start()
 	$EnemySpawnTimer.start()
 	$WandererSpawnTimer.start()
 	

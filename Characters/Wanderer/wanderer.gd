@@ -1,10 +1,11 @@
 extends Area2D
+class_name Wanderer
 
 signal died
 
 @export var shoot_cooldown := 3
 @export var health := 7
-@export var bullet_scene: PackedScene = preload("res://Objects/Shuriken/shuriken.tscn")
+var bullet_scene: PackedScene = load("res://Objects/Shuriken/shuriken.tscn")
 
 var colliding_cars: Array[CollisionObject2D] = []
 var speed: float = 0
@@ -145,6 +146,8 @@ func _on_area_entered(area: Area2D) -> void:
 	if area is TrainCar:
 		colliding_cars.append(area)
 		$ShootTimer.set_paused(true)
+		hit()
+	if area is TrainBullet:
 		hit()
 
 

@@ -71,13 +71,15 @@ func move_train_cars(delta):
 
 
 # Spawns a new TrainCar behind the last car in the train 
-func spawn_train():
+func spawn_train(type: String = "normal"):
 	# Do not spawn if the train has the max amount of train cars
 	if train_cars.size() >= MAX_TRAIN_CARS:
 		return
 	
 	# Create the new car and find the length from the center to the front
-	var new_train_car = train_car_scene.instantiate()
+	var new_train_car: TrainCar = train_car_scene.instantiate()
+	if type != "normal":
+		new_train_car.type = type
 	new_train_car.train_car_death.connect(_on_train_car_death)
 	var car_center_to_front_len = (new_train_car.get_node("Front").position - new_train_car.position).length()
 	
@@ -128,6 +130,10 @@ func move_to(pos: Vector2):
 # Handler for collecting a pickup
 func _on_locomotive_collect_pickup() -> void:
 	spawn_train()
+
+
+func _on_locomotive_collect_weapon_pickup() -> void:
+	spawn_train("gun")
 
 
 func _on_locomotive_collect_health_pickup() -> void:

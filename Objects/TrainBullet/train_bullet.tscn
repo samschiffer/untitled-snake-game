@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://chyr104x4wh1f"]
+
+[ext_resource type="Script" uid="uid://jjy1x2478756" path="res://Objects/TrainBullet/train_bullet.gd" id="1_ykbk3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oh8il"]
+size = Vector2(16, 16)
+
+[node name="TrainBullet" type="Area2D"]
+script = ExtResource("1_ykbk3")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0.239216, 1, 0.576471, 1)
+polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_oh8il")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://c51kjlq5q4r3f"]
+
+[ext_resource type="Texture2D" uid="uid://nfwarsa7jmoi" path="res://assets/weapon_pickup.png" id="1_l7toi"]
+[ext_resource type="Script" uid="uid://bdxiiafqa5i6r" path="res://Objects/WeaponPickup/weapon_pickup.gd" id="1_nhlpn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nhlpn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_l7toi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t5rym"]
+radius = 50.0
+
+[node name="WeaponPickup" type="Area2D" groups=["WeaponPickups"]]
+script = ExtResource("1_nhlpn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1.90735e-06, -1.90735e-06)
+scale = Vector2(0.42, 0.42)
+sprite_frames = SubResource("SpriteFrames_nhlpn")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.90735e-06, -1.90735e-06)
+scale = Vector2(0.42, 0.42)
+shape = SubResource("CircleShape2D_t5rym")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

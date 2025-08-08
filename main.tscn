@@ -19,6 +19,8 @@ wait_time = 10.0
 [node name="HealthPickupSpawnTimer" type="Timer" parent="."]
 wait_time = 7.0
 
+[node name="WeaponPickupTimer" type="Timer" parent="."]
+
 [node name="SurviveTimer" type="Timer" parent="."]
 one_shot = true
 
@@ -32,4 +34,5 @@ one_shot = true
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
 [connection signal="timeout" from="WandererSpawnTimer" to="." method="_on_wanderer_spawn_timer_timeout"]
 [connection signal="timeout" from="HealthPickupSpawnTimer" to="." method="_on_health_pickup_spawn_timer_timeout"]
+[connection signal="timeout" from="WeaponPickupTimer" to="." method="_on_weapon_pickup_timer_timeout"]
 [connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]

@@ -1,19 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6r1vqj2mwntn"]
+[gd_scene load_steps=5 format=3 uid="uid://c6r1vqj2mwntn"]
 
 [ext_resource type="Script" uid="uid://c1oaj4xdpd57p" path="res://Objects/Pickup/pickup.gd" id="1_7sroh"]
+[ext_resource type="Texture2D" uid="uid://c48qhijh46ht7" path="res://assets/train_pickup.png" id="2_rul55"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqk3k"]
-size = Vector2(22.6274, 22.6274)
+[sub_resource type="SpriteFrames" id="SpriteFrames_c4hfo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rul55")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uo25g"]
+radius = 14.6503
 
 [node name="Pickup" type="Area2D" groups=["Pickups"]]
 script = ExtResource("1_7sroh")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color(1, 1, 0.164706, 1)
-polygon = PackedVector2Array(-16, 0, 0, -16, 16, 0, 0, 16)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1.43051e-06, 4.76837e-07)
+scale = Vector2(0.42, 0.42)
+sprite_frames = SubResource("SpriteFrames_c4hfo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = 0.785398
-shape = SubResource("RectangleShape2D_iqk3k")
+position = Vector2(0, 3.41061e-13)
+rotation = 0.773494
+scale = Vector2(1.44838, 1.44838)
+skew = 0.0238085
+shape = SubResource("CircleShape2D_uo25g")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

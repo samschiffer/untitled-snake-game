@@ -1,4 +1,5 @@
 extends Area2D
+class_name Enemy
 
 signal died
 
@@ -26,10 +27,6 @@ func _process(delta: float) -> void:
 	$Label.text = str(health)
 	$Label2.text = String.num(snapped($ShootTimer.time_left, 0.1))
 	
-	# Debugging the shoot function
-	if Input.is_action_just_pressed("shoot"):
-		shoot()
-	
 	# Rotate towards the train's locomotive if it exists
 	if player_train:
 		rotation = global_position.direction_to(player_train.get_node("Locomotive").global_position).angle() + PI / 2
@@ -51,6 +48,8 @@ func _on_area_entered(area: Area2D) -> void:
 		colliding_cars.append(area)
 		$ShootTimer.set_paused(true)
 		hit()
+	elif area is TrainBullet:
+		hit() 
 
 
 func _on_area_exited(area: Area2D) -> void:

@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcs1um8yb6wr8"]
+[gd_scene load_steps=9 format=3 uid="uid://bcs1um8yb6wr8"]
 
 [ext_resource type="Script" uid="uid://bn0msxiycoegl" path="res://test_room.gd" id="1_ju58f"]
 [ext_resource type="PackedScene" uid="uid://b7300t7pcof2s" path="res://Environment/Room/room.tscn" id="2_arrdh"]
 [ext_resource type="PackedScene" uid="uid://c8in37b8i7qe2" path="res://HUD/Transition/transition.tscn" id="4_ju58f"]
+[ext_resource type="PackedScene" uid="uid://c51kjlq5q4r3f" path="res://Objects/WeaponPickup/weapon_pickup.tscn" id="5_bd7ek"]
 [ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="5_sqxie"]
+[ext_resource type="PackedScene" uid="uid://c6r1vqj2mwntn" path="res://Objects/Pickup/pickup.tscn" id="6_bd7ek"]
+[ext_resource type="PackedScene" uid="uid://bfd524m7thju4" path="res://Characters/Enemy/enemy.tscn" id="7_f0xav"]
+[ext_resource type="PackedScene" uid="uid://bn4xv0oc4t7t6" path="res://Characters/Wanderer/wanderer.tscn" id="8_3vbl4"]
 
 [node name="TestRoom" type="Node"]
 script = ExtResource("1_ju58f")
@@ -18,6 +22,18 @@ process_callback = 0
 editor_draw_limits = true
 
 [node name="Train" parent="." instance=ExtResource("5_sqxie")]
+
+[node name="WeaponPickup" parent="." instance=ExtResource("5_bd7ek")]
+position = Vector2(523, 518)
+
+[node name="Pickup" parent="." instance=ExtResource("6_bd7ek")]
+position = Vector2(1659, 414)
+
+[node name="Enemy" parent="." instance=ExtResource("7_f0xav")]
+position = Vector2(1300, 757)
+
+[node name="Wanderer" parent="." instance=ExtResource("8_3vbl4")]
+position = Vector2(490, 777)
 
 [connection signal="train_entered_room" from="Room" to="." method="_on_room_train_entered_room"]
 [connection signal="train_left_room" from="Room" to="." method="_on_room_train_left_room"]

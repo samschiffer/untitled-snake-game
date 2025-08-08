@@ -5,6 +5,7 @@ class_name Locomotive
 
 signal collect_pickup
 signal collect_health_pickup
+signal collect_weapon_pickup
 signal locomotive_hit
 
 const FRICTION: float = 2
