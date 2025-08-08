@@ -1,15 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbfp47w6mdxfe"]
+[gd_scene load_steps=5 format=3 uid="uid://bbfp47w6mdxfe"]
 
 [ext_resource type="Script" uid="uid://baaqirjipamlk" path="res://Objects/HealthPickup/health_pickup.gd" id="1_wvjdf"]
+[ext_resource type="Texture2D" uid="uid://bxustwhfodlqj" path="res://assets/health_pickup.png" id="2_4qswh"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bm44m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4qswh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wuctw"]
+radius = 21.0
 
 [node name="HealthPickup" type="Area2D" groups=["HealthPickups"]]
 script = ExtResource("1_wvjdf")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color(0.239216, 0.878431, 0.14902, 1)
-polygon = PackedVector2Array(-8, -16, -8, -8, -16, -8, -16, 0, -16, 8, -8, 8, -8, 16, 0, 16, 8, 16, 8, 8, 16, 8, 16, -8, 8, -8, 8, -16)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.42, 0.42)
+sprite_frames = SubResource("SpriteFrames_bm44m")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-8, -16, -8, -8, -16, -8, -16, 8, -8, 8, -8, 16, 8, 16, 8, 8, 16, 8, 16, -8, 8, -8, 8, -16)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_wuctw")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

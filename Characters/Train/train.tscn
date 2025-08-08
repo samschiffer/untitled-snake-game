@@ -21,4 +21,5 @@ vertical_alignment = 1
 
 [connection signal="collect_health_pickup" from="Locomotive" to="." method="_on_locomotive_collect_health_pickup"]
 [connection signal="collect_pickup" from="Locomotive" to="." method="_on_locomotive_collect_pickup"]
+[connection signal="collect_weapon_pickup" from="Locomotive" to="." method="_on_locomotive_collect_weapon_pickup"]
 [connection signal="locomotive_hit" from="Locomotive" to="." method="_on_locomotive_locomotive_hit"]
