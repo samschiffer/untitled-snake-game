@@ -81,4 +81,27 @@ offset_bottom = 133.0
 theme_override_font_sizes/font_size = 50
 text = "Level: "
 
+[node name="BoostLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 125.0
+offset_right = 107.0
+offset_bottom = 167.0
+theme_override_font_sizes/font_size = 30
+text = "Boost:"
+
+[node name="ColorRect" type="ColorRect" parent="BoostLabel"]
+layout_mode = 0
+offset_top = 42.0
+offset_right = 464.0
+offset_bottom = 66.0
+color = Color(0.870588, 0.780392, 0, 1)
+
+[node name="ReferenceRect" type="ReferenceRect" parent="BoostLabel/ColorRect"]
+layout_mode = 0
+offset_right = 464.0
+offset_bottom = 24.0
+border_color = Color(0, 0, 0, 1)
+border_width = 3.0
+editor_only = false
+
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
