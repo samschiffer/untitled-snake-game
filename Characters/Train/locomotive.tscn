@@ -30,3 +30,17 @@ debug_color = Color(0, 0.6, 0.701961, 0.505882)
 
 [node name="Back" type="Marker2D" parent="."]
 position = Vector2(0, 35)
+
+[node name="SpeedLabel" type="Label" parent="."]
+visible = false
+offset_left = -20.0
+offset_top = 12.0
+offset_right = 20.0
+offset_bottom = 35.0
+
+[node name="BoostLabel" type="Label" parent="."]
+visible = false
+offset_left = -20.0
+offset_top = -34.0
+offset_right = 20.0
+offset_bottom = -11.0

@@ -68,6 +68,10 @@ func _process(delta: float) -> void:
 		complete_objective()
 
 
+func _physics_process(delta: float) -> void:
+	if player_train:
+		$HUD.update_current_boost(player_train.get_node("Locomotive").boost_amount)
+
 func _on_hud_start_game() -> void:
 	create_room()
 
@@ -129,6 +133,7 @@ func start_game():
 	# Update the HUD values 
 	$HUD.update_max_health(player_train.health)
 	$HUD.update_current_health(player_train.health)
+	$HUD.update_max_boost(player_train.get_node("Locomotive").boost_amount)
 	$HUD.update_score(0)
 	$HUD.update_level(level)
 	
