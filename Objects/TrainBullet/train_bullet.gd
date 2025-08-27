@@ -16,10 +16,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is TrainCar or area is Enemy or area is Wanderer:
+	if area is TrainCar or area is Watcher or area is Wanderer:
 		queue_free()
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is Locomotive:
+	if body is Locomotive or body is Wall or body is Door:
 		queue_free()

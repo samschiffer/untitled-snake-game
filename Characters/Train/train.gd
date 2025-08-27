@@ -11,7 +11,7 @@ const TRAIN_CAR_BUFFER: float = 20 # The distance between each train car in the 
 
 var train_cars: Array[TrainCar] = []
 var speed: float = 0
-@export var max_health: float = 15
+@export var max_health: float = 100
 var health: float
 
 # Called when the node enters the scene tree for the first time.

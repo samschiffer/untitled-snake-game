@@ -1,5 +1,5 @@
 extends Area2D
-class_name Enemy
+class_name Watcher
 
 signal died
 

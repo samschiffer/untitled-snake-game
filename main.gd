@@ -4,7 +4,7 @@ extends Node
 var pickup_scene: PackedScene = preload("res://Objects/Pickup/pickup.tscn")
 var health_pickup_scene: PackedScene = preload("res://Objects/HealthPickup/health_pickup.tscn")
 var weapon_pickup_scene: PackedScene = preload("res://Objects/WeaponPickup/weapon_pickup.tscn")
-var enemy_scene: PackedScene = preload("res://Characters/Enemy/enemy.tscn")
+var watcher_scene: PackedScene = preload("res://Characters/Watcher/watcher.tscn")
 var wanderer_scene: PackedScene = preload("res://Characters/Wanderer/wanderer.tscn")
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
 var room_scene: PackedScene = preload("res://Environment/Room/room.tscn")
@@ -37,15 +37,15 @@ var camera_follow_player: bool = false
 
 # Spawn Rate vars
 var pickup_spawn_rate: float = 5.0
-var enemy_spawn_rate: float = 10.0
+var watcher_spawn_rate: float = 10.0
 var health_spawn_rate: float = 20.0
 var weapon_spawn_rate: float = 5.0
-var enemy_health: float = 10
+var watcher_health: float = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$PickupSpawnTimer.wait_time = pickup_spawn_rate
-	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$WatcherSpawnTimer.wait_time = watcher_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
 	$WeaponPickupTimer.wait_time = weapon_spawn_rate
 
@@ -100,11 +100,11 @@ func start_game():
 	
 	# Reset spawn rates
 	pickup_spawn_rate = 5.0
-	enemy_spawn_rate = 10.0
+	watcher_spawn_rate = 10.0
 	health_spawn_rate = 20.0
 	
 	$PickupSpawnTimer.wait_time = pickup_spawn_rate
-	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$WatcherSpawnTimer.wait_time = watcher_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
 	$WeaponPickupTimer.wait_time = weapon_spawn_rate
 	
@@ -144,15 +144,15 @@ func start_game():
 	spawn_pickup()
 	spawn_pickup()
 	spawn_pickup()
-	spawn_enemy()
-	spawn_enemy()
+	spawn_watcher()
+	spawn_watcher()
 	spawn_wanderer()
 	
 	# Start the timers for spawning new pickups and enemies
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$WeaponPickupTimer.start()
-	$EnemySpawnTimer.start()
+	$WatcherSpawnTimer.start()
 	$WandererSpawnTimer.start()
 
 
@@ -203,7 +203,7 @@ func complete_objective():
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
 	$WeaponPickupTimer.stop()
-	$EnemySpawnTimer.stop()
+	$WatcherSpawnTimer.stop()
 	$WandererSpawnTimer.stop()
 	
 	# Open the doors so they can move to the next level
@@ -255,20 +255,20 @@ func _on_collect_pickup():
 	increment_score(20)
 
 
-func _on_enemy_spawn_timer_timeout() -> void:
-	spawn_enemy()
+func _on_watcher_spawn_timer_timeout() -> void:
+	spawn_watcher()
 
 
-# Spawns an enemy at a random location on the screen
-func spawn_enemy():
+# Spawns a watcher at a random location on the screen
+func spawn_watcher():
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var rand_x: float = randf_range(80.0, room_width - 80.0)
 	var rand_y: float = randf_range(80.0, room_height - 80.0)
-	var new_enemy: Area2D = enemy_scene.instantiate()
-	new_enemy.health = enemy_health
-	new_enemy.position = Vector2(rand_x, rand_y)
-	new_enemy.died.connect(_on_enemy_death)
-	add_child(new_enemy)
+	var new_watcher: Area2D = watcher_scene.instantiate()
+	new_watcher.health = watcher_health
+	new_watcher.position = Vector2(rand_x, rand_y)
+	new_watcher.died.connect(_on_enemy_death)
+	add_child(new_watcher)
 
 
 func _on_enemy_death():
@@ -328,7 +328,7 @@ func game_over():
 	$PickupSpawnTimer.stop()
 	$HealthPickupSpawnTimer.stop()
 	$WeaponPickupTimer.stop()
-	$EnemySpawnTimer.stop()
+	$WatcherSpawnTimer.stop()
 	$WandererSpawnTimer.stop()
 	$HUD.show_game_over()
 	
@@ -361,7 +361,7 @@ func _on_room_train_entered_room(train: Train) -> void:
 	$PickupSpawnTimer.start()
 	$HealthPickupSpawnTimer.start()
 	$WeaponPickupTimer.start()
-	$EnemySpawnTimer.start()
+	$WatcherSpawnTimer.start()
 	$WandererSpawnTimer.start()
 	
 	# Close the doors
@@ -378,8 +378,8 @@ func _on_room_train_entered_room(train: Train) -> void:
 	spawn_pickup()
 	spawn_pickup()
 	spawn_pickup()
-	spawn_enemy()
-	spawn_enemy()
+	spawn_watcher()
+	spawn_watcher()
 	spawn_wanderer()
 
 
@@ -427,12 +427,12 @@ func increase_level():
 	$HUD.update_level(level)
 	
 	pickup_spawn_rate += 0.5
-	enemy_spawn_rate -= 0.25
+	watcher_spawn_rate -= 0.25
 	health_spawn_rate += 0.5
 	
 	$PickupSpawnTimer.wait_time = pickup_spawn_rate
-	$EnemySpawnTimer.wait_time = enemy_spawn_rate
+	$WatcherSpawnTimer.wait_time = watcher_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
 	
 	if level % 3 == 0:
-		enemy_health += 2
+		watcher_health += 2

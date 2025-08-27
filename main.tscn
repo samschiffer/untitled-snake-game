@@ -10,7 +10,7 @@ script = ExtResource("1_0xm2m")
 [node name="PickupSpawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[node name="EnemySpawnTimer" type="Timer" parent="."]
+[node name="WatcherSpawnTimer" type="Timer" parent="."]
 wait_time = 9.0
 
 [node name="WandererSpawnTimer" type="Timer" parent="."]
@@ -31,7 +31,7 @@ one_shot = true
 [node name="Transition" parent="." instance=ExtResource("3_h2yge")]
 
 [connection signal="timeout" from="PickupSpawnTimer" to="." method="_on_pickup_timer_timeout"]
-[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
+[connection signal="timeout" from="WatcherSpawnTimer" to="." method="_on_watcher_spawn_timer_timeout"]
 [connection signal="timeout" from="WandererSpawnTimer" to="." method="_on_wanderer_spawn_timer_timeout"]
 [connection signal="timeout" from="HealthPickupSpawnTimer" to="." method="_on_health_pickup_spawn_timer_timeout"]
 [connection signal="timeout" from="WeaponPickupTimer" to="." method="_on_weapon_pickup_timer_timeout"]
