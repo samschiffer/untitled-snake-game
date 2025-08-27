@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c51kjlq5q4r3f" path="res://Objects/WeaponPickup/weapon_pickup.tscn" id="5_bd7ek"]
 [ext_resource type="PackedScene" uid="uid://c5othik3xlmjy" path="res://Characters/Train/train.tscn" id="5_sqxie"]
 [ext_resource type="PackedScene" uid="uid://c6r1vqj2mwntn" path="res://Objects/Pickup/pickup.tscn" id="6_bd7ek"]
-[ext_resource type="PackedScene" uid="uid://bfd524m7thju4" path="res://Characters/Enemy/enemy.tscn" id="7_f0xav"]
+[ext_resource type="PackedScene" uid="uid://bfd524m7thju4" path="res://Characters/Watcher/watcher.tscn" id="7_f0xav"]
 [ext_resource type="PackedScene" uid="uid://bn4xv0oc4t7t6" path="res://Characters/Wanderer/wanderer.tscn" id="8_3vbl4"]
 
 [node name="TestRoom" type="Node"]

@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://bfd524m7thju4"]
 
-[ext_resource type="Script" uid="uid://cygi8kypix1qm" path="res://Characters/Enemy/enemy.gd" id="1_bxjv2"]
+[ext_resource type="Script" uid="uid://cygi8kypix1qm" path="res://Characters/Watcher/watcher.gd" id="1_76ifh"]
 
 [node name="Enemy" type="Area2D" groups=["Enemies"]]
-script = ExtResource("1_bxjv2")
+script = ExtResource("1_76ifh")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color(1, 0.52549, 0.262745, 1)

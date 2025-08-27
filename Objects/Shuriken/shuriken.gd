@@ -24,3 +24,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is Locomotive:
 		body.locomotive_hit.emit()
 		queue_free()
+	elif body is Wall or body is Door:
+		queue_free()
