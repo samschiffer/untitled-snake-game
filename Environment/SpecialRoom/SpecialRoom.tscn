@@ -1,0 +1,139 @@
+[gd_scene load_steps=4 format=3 uid="uid://d355kqx68ttdw"]
+
+[ext_resource type="Script" uid="uid://ervypuuy1egs" path="res://Environment/SpecialRoom/special_room.gd" id="1_4ii3t"]
+[ext_resource type="PackedScene" uid="uid://cpw3x3dqo7mx7" path="res://Environment/Door/Door.tscn" id="2_ll1vx"]
+[ext_resource type="PackedScene" uid="uid://dgvaaghik8aup" path="res://Environment/wall.tscn" id="3_e7f6g"]
+
+[node name="SpecialRoom" type="Area2D" node_paths=PackedStringArray("door_top", "door_right", "door_bottom", "door_left", "entry_top", "entry_right", "entry_bottom", "entry_left", "floor")]
+script = ExtResource("1_4ii3t")
+door_top = NodePath("Doors/TopDoor")
+door_right = NodePath("Doors/RightDoor")
+door_bottom = NodePath("Doors/BottomDoor")
+door_left = NodePath("Doors/LeftDoor")
+entry_top = NodePath("EntryPoints/TopEntry")
+entry_right = NodePath("EntryPoints/RightEntry")
+entry_bottom = NodePath("EntryPoints/BottomEntry")
+entry_left = NodePath("EntryPoints/LeftEntry")
+floor = NodePath("Floor")
+
+[node name="Floor" type="Polygon2D" parent="."]
+position = Vector2(1312, 4.54747e-13)
+rotation = 0.000199195
+scale = Vector2(759.252, 390.178)
+polygon = PackedVector2Array(0.922888, 0, -0.0576805, 0, -1.03825, 0, -1.72802, 1.45575, -1.72802, 4.26472, -0.800788, 6.27406, 0.927229, 6.5201, 2.54988, 5.26939, 3.28745, 2.91149, 2.8133, 0.902153, 1.96114, 0.448965)
+uv = PackedVector2Array(0.922888, 0, -0.0576805, 0, -1.03825, 0, -1.72802, 1.45575, -1.72802, 4.26472, -0.800788, 6.27406, 0.927229, 6.5201, 2.54988, 5.26939, 3.28745, 2.91149, 2.8133, 0.902153, 1.96114, 0.448965)
+metadata/_edit_group_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = 0.000199195
+polygon = PackedVector2Array(520, 0, 0, 568, 0, 1664, 704, 2448, 2016, 2544, 3248, 2056, 3808, 1136, 3448, 352, 2800, 176, 2008, 0)
+metadata/_edit_group_ = true
+
+[node name="EntryPoints" type="Node2D" parent="."]
+
+[node name="TopEntry" type="Marker2D" parent="EntryPoints"]
+position = Vector2(1362, -145)
+rotation = -3.11754
+
+[node name="LeftEntry" type="Marker2D" parent="EntryPoints"]
+position = Vector2(-206, 1083)
+rotation = 1.57837
+
+[node name="RightEntry" type="Marker2D" parent="EntryPoints"]
+position = Vector2(3665, 1673)
+rotation = -1.14553
+
+[node name="BottomEntry" type="Marker2D" parent="EntryPoints"]
+position = Vector2(1401, 2701)
+rotation = 0.0870907
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="TopDoor" parent="Doors" instance=ExtResource("2_ll1vx")]
+position = Vector2(1065, -37)
+scale = Vector2(600, 20)
+
+[node name="LeftDoor" parent="Doors" instance=ExtResource("2_ll1vx")]
+position = Vector2(-34, 1261)
+rotation = -1.5708
+scale = Vector2(400, 20)
+
+[node name="RightDoor" parent="Doors" instance=ExtResource("2_ll1vx")]
+position = Vector2(3674, 1413)
+rotation = 2.11858
+scale = Vector2(600, 20)
+
+[node name="BottomDoor" parent="Doors" instance=ExtResource("2_ll1vx")]
+position = Vector2(1837, 2562)
+rotation = -3.07076
+scale = Vector2(800, 20)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="Wall" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(-14, 554)
+rotation = -0.823676
+scale = Vector2(774.482, 20)
+
+[node name="Wall2" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(-14, 1659)
+rotation = -1.5708
+scale = Vector2(400, 20.185)
+
+[node name="Wall3" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(-14, 861)
+rotation = -1.5708
+scale = Vector2(307.948, 20)
+
+[node name="Wall4" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(514, -17)
+scale = Vector2(550.854, 20.5359)
+
+[node name="Wall5" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(1665, -17)
+scale = Vector2(350.52, 18.4272)
+
+[node name="Wall6" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(2016, -17)
+rotation = 0.220043
+scale = Vector2(806.629, 18.236)
+
+[node name="Wall7" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(2802, 159)
+rotation = 0.277514
+scale = Vector2(674.807, 15.0736)
+
+[node name="Wall8" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(3449, 344)
+rotation = 1.13475
+scale = Vector2(869.144, 18.6537)
+
+[node name="Wall9" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(3817, 1131)
+rotation = 2.09534
+scale = Vector2(315.248, 22.2976)
+
+[node name="Wall10" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(3347, 1915)
+rotation = 2.09534
+scale = Vector2(172.561, 22.2487)
+
+[node name="Wall12" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(2015, 2556)
+rotation = -3.05551
+scale = Vector2(177.745, 17.355)
+
+[node name="Wall13" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(1041, 2483)
+rotation = -3.05551
+scale = Vector2(338.301, 17.4866)
+
+[node name="Wall14" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(704, 2454)
+rotation = -2.31012
+scale = Vector2(1075.82, 20.1477)
+
+[node name="Wall11" parent="Walls" instance=ExtResource("3_e7f6g")]
+position = Vector2(3260, 2064)
+rotation = 2.76572
+scale = Vector2(1338.93, 17.5286)

@@ -7,13 +7,19 @@ var weapon_pickup_scene: PackedScene = preload("res://Objects/WeaponPickup/weapo
 var watcher_scene: PackedScene = preload("res://Characters/Watcher/watcher.tscn")
 var wanderer_scene: PackedScene = preload("res://Characters/Wanderer/wanderer.tscn")
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
+
 var room_scene: PackedScene = preload("res://Environment/Room/room.tscn")
+var special_room_scene: PackedScene = preload("res://Environment/SpecialRoom.tscn")
 var player_train: Train
 
 # Current Room variables
 var current_room: Room
 var room_width: float
 var room_height: float
+
+# List of rooms
+var available_rooms = []
+var rooms_index = 0
 
 # Scoring variables
 var score: int = 0
@@ -48,6 +54,8 @@ func _ready() -> void:
 	$WatcherSpawnTimer.wait_time = watcher_spawn_rate
 	$HealthPickupSpawnTimer.wait_time = health_spawn_rate
 	$WeaponPickupTimer.wait_time = weapon_spawn_rate
+	
+	available_rooms = [room_scene, special_room_scene]
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -212,10 +220,7 @@ func complete_objective():
 
 func open_doors():
 	if player_train != null:
-		current_room.get_node("DoorTop").open_for(player_train.get_node("Locomotive"))
-		current_room.get_node("DoorLeft").open_for(player_train.get_node("Locomotive"))
-		current_room.get_node("DoorRight").open_for(player_train.get_node("Locomotive"))
-		current_room.get_node("DoorBottom").open_for(player_train.get_node("Locomotive"))
+		current_room.open_all_doors_for(player_train.get_node("Locomotive"))
 
 
 func increment_score(amount: int):
@@ -237,17 +242,40 @@ func _on_health_changed():
 	$HUD.update_current_health(player_train.health)
 
 
+func get_random_spawn_point():
+	var room_width = current_room.bounding_box.x
+	var room_height = current_room.bounding_box.y
+	var rand_y: float
+	var rand_x: float
+	
+	var room_floor: Polygon2D = current_room.floor
+	var room_floor_polygon: PackedVector2Array = room_floor.polygon
+	var transformed_polygon_points = []
+	for point_local in room_floor_polygon:
+		var point_global = room_floor.to_global(point_local)
+		transformed_polygon_points.append(point_global)
+		
+	var spawn_point_in_room = false
+	var tries = 0
+	while not spawn_point_in_room:
+		rand_x = randf_range(60.0, room_width - 60.0)
+		rand_y = randf_range(60.0, room_height - 60.0)
+		spawn_point_in_room = Geometry2D.is_point_in_polygon(Vector2(rand_x, rand_y), transformed_polygon_points)
+		tries += 1
+		if tries > 500:
+			print("Timed out: could not find point in room") # TODO Add better error handling
+			spawn_point_in_room = true
+	
+	return Vector2(rand_x, rand_y)
+
 func _on_pickup_timer_timeout() -> void:
 	spawn_pickup()
 
 
 # Spawns a pickup at a random location on the screen
 func spawn_pickup():
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var rand_x: float = randf_range(60.0, room_width - 60.0)
-	var rand_y: float = randf_range(60.0, room_height - 60.0)
 	var new_pickup: Area2D = pickup_scene.instantiate()
-	new_pickup.position = Vector2(rand_x, rand_y)
+	new_pickup.position = get_random_spawn_point()
 	add_child(new_pickup)
 
 
@@ -261,12 +289,9 @@ func _on_watcher_spawn_timer_timeout() -> void:
 
 # Spawns a watcher at a random location on the screen
 func spawn_watcher():
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var rand_x: float = randf_range(80.0, room_width - 80.0)
-	var rand_y: float = randf_range(80.0, room_height - 80.0)
 	var new_watcher: Area2D = watcher_scene.instantiate()
 	new_watcher.health = watcher_health
-	new_watcher.position = Vector2(rand_x, rand_y)
+	new_watcher.position = get_random_spawn_point()
 	new_watcher.died.connect(_on_enemy_death)
 	add_child(new_watcher)
 
@@ -284,12 +309,9 @@ func _on_wanderer_spawn_timer_timeout() -> void:
 
 # Spawns an enemy at a random location on the screen
 func spawn_wanderer():
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var rand_x: float = randf_range(80.0, room_width - 80.0)
-	var rand_y: float = randf_range(80.0, room_height - 80.0)
 	var new_wanderer: Area2D = wanderer_scene.instantiate()
 	new_wanderer.health = 7
-	new_wanderer.position = Vector2(rand_x, rand_y)
+	new_wanderer.position = get_random_spawn_point()
 	new_wanderer.died.connect(_on_enemy_death)
 	add_child(new_wanderer)
 
@@ -299,11 +321,8 @@ func _on_health_pickup_spawn_timer_timeout() -> void:
 
 
 func spawn_health_pickup():
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var rand_x: float = randf_range(60.0, room_width - 60.0)
-	var rand_y: float = randf_range(60.0, room_height - 60.0)
 	var new_pickup: Area2D = health_pickup_scene.instantiate()
-	new_pickup.position = Vector2(rand_x, rand_y)
+	new_pickup.position = get_random_spawn_point()
 	add_child(new_pickup)
 
 
@@ -312,11 +331,8 @@ func _on_weapon_pickup_timer_timeout() -> void:
 
 
 func spawn_weapon_pickup():
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var rand_x: float = randf_range(60.0, room_width - 60.0)
-	var rand_y: float = randf_range(60.0, room_height - 60.0)
 	var new_pickup: Area2D = weapon_pickup_scene.instantiate()
-	new_pickup.position = Vector2(rand_x, rand_y)
+	new_pickup.position = get_random_spawn_point()
 	add_child(new_pickup)
 
 
@@ -366,15 +382,10 @@ func _on_room_train_entered_room(train: Train) -> void:
 	
 	# Close the doors
 	await get_tree().create_timer(1.0).timeout
-
-	current_room.get_node("DoorTop").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorLeft").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorBottom").close_for(player_train.get_node("Locomotive"))
-	current_room.get_node("DoorRight").close_for(player_train.get_node("Locomotive"))
+	current_room.close_all_doors_for(player_train.get_node("Locomotive"))
 	
 	# Initial spawns in room
 	await get_tree().create_timer(1.0).timeout
-	
 	spawn_pickup()
 	spawn_pickup()
 	spawn_pickup()
@@ -388,38 +399,55 @@ func go_to_next_room(from_direction: String):
 	clear_room()
 	increase_level()
 	get_new_objective()
+	change_rooms()
 	
-	# Move the player outside of the correct door based on which door they exited the last room from
+	var train_entry
 	match from_direction:
 		"top":
-			# Go to the bottom
-			player_train.get_node("Locomotive").rotation = 0
-			player_train.move_to(Vector2(current_room.get_node("ExitBottom").position.x, current_room.get_node("ExitBottom").position.y + 40))
-			$Camera2D.position = current_room.get_node("ExitBottom").position
-			$Camera2D.reset_smoothing()
+			train_entry = current_room.entry_bottom
 		"left":
-			# Go to the right
-			player_train.get_node("Locomotive").rotation = (3 * PI) / 2.0
-			player_train.move_to(Vector2(current_room.get_node("ExitRight").position.x + 40, current_room.get_node("ExitRight").position.y))
-			$Camera2D.position = current_room.get_node("ExitRight").position
-			$Camera2D.reset_smoothing()
+			train_entry = current_room.entry_right
 		"bottom":
-			# Go to the top
-			player_train.get_node("Locomotive").rotation = PI
-			player_train.move_to(Vector2(current_room.get_node("ExitTop").position.x, current_room.get_node("ExitTop").position.y - 40))
-			$Camera2D.position = current_room.get_node("ExitTop").position
-			$Camera2D.reset_smoothing()
+			train_entry = current_room.entry_top
 		"right":
-			# Go to the left
-			player_train.get_node("Locomotive").rotation = PI / 2
-			player_train.move_to(Vector2(current_room.get_node("ExitLeft").position.x - 40, current_room.get_node("ExitLeft").position.y))
-			$Camera2D.position = current_room.get_node("ExitLeft").position
-			$Camera2D.reset_smoothing()
+			train_entry = current_room.entry_left
 	
+	# Go to the entry point
+	$Train/Locomotive.rotation = train_entry.rotation
+	$Train.move_to(train_entry.position)
+	$Camera2D.position = train_entry.position
+	$Camera2D.reset_smoothing()
+
 	current_room.check_for_train_entered(player_train)
 	player_train.get_node("Locomotive").show()
 	player_train.get_node("Locomotive").speed = 600
 	$Transition.unfade()
+
+func change_rooms():
+	# Tear down current room
+	current_room.queue_free()
+	
+	# Choose which room
+	rooms_index = (rooms_index + 1) % 2
+	var room_scene = available_rooms[rooms_index]
+	
+	# Create new room
+	var new_room = room_scene.instantiate()
+	$Camera2D.add_sibling(new_room)
+	current_room = new_room
+	
+	# Change the camera limits
+	$Camera2D.limit_left = current_room.position.x - camera_buffer
+	$Camera2D.limit_top = current_room.position.y - camera_buffer
+	$Camera2D.limit_right =  current_room.position.x + current_room.bounding_box.x + camera_buffer
+	$Camera2D.limit_bottom = current_room.position.y + current_room.bounding_box.y + camera_buffer
+	
+	# Connect room to signals
+	current_room.train_left_room.connect(_on_room_train_left_room)
+	current_room.train_entered_room.connect(_on_room_train_entered_room)
+	
+	# Open doors for the player
+	current_room.open_all_doors_for(player_train.get_node("Locomotive"))
 
 
 func increase_level():

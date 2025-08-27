@@ -1,18 +1,55 @@
-[gd_scene load_steps=3 format=3 uid="uid://bih3mk2eq5mfm"]
+[gd_scene load_steps=5 format=3 uid="uid://cpw3x3dqo7mx7"]
 
-[ext_resource type="Script" uid="uid://bpdx62uathw62" path="res://Environment/Door/door.gd" id="1_x33gj"]
+[ext_resource type="Script" uid="uid://dyxdpm4o1qthd" path="res://Environment/Door/door.gd" id="1_kcu0o"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dlwyn"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tstaw"]
 size = Vector2(1, 1)
 
-[node name="Door" type="StaticBody2D"]
-script = ExtResource("1_x33gj")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ec3f1"]
+size = Vector2(1, 1)
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-scale = Vector2(0.125, 0.125)
-color = Color(1, 0, 0, 1)
-polygon = PackedVector2Array(0, 0, 0, 0, 8, 0, 8, 8, 0, 8)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8bsoq"]
+size = Vector2(1, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="NewDoor" type="Node2D"]
+script = ExtResource("1_kcu0o")
+
+[node name="Outside" type="Area2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="Outside"]
+visible = false
+scale = Vector2(2.33333, 2)
+color = Color(0.84, 0.0756, 0.0756, 1)
+polygon = PackedVector2Array(0, 0, 3.85714, 0, 3.85714, 1, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Outside"]
 position = Vector2(0.5, 0.5)
-shape = SubResource("RectangleShape2D_dlwyn")
+shape = SubResource("RectangleShape2D_tstaw")
+
+[node name="Inside" type="Area2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="Inside"]
+visible = false
+position = Vector2(0, -1)
+color = Color(0.226667, 1, 0.2, 1)
+polygon = PackedVector2Array(0, 3, 9, 3, 9, 5, 0, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Inside"]
+position = Vector2(0.5, 1.5)
+shape = SubResource("RectangleShape2D_ec3f1")
+
+[node name="PhysicalDoor" type="StaticBody2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="PhysicalDoor"]
+scale = Vector2(0.111111, 0.5)
+color = Color(0.4, 0.2416, 0.048, 1)
+polygon = PackedVector2Array(0, 2, 9, 2, 9, 4, 0, 4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicalDoor"]
+position = Vector2(0.5, 1.5)
+shape = SubResource("RectangleShape2D_8bsoq")
+
+[connection signal="area_entered" from="Outside" to="." method="_on_outside_area_entered"]
+[connection signal="body_entered" from="Outside" to="." method="_on_outside_body_entered"]
+[connection signal="area_entered" from="Inside" to="." method="_on_inside_area_entered"]
+[connection signal="body_entered" from="Inside" to="." method="_on_inside_body_entered"]
