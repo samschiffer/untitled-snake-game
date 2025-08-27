@@ -9,7 +9,7 @@ var wanderer_scene: PackedScene = preload("res://Characters/Wanderer/wanderer.ts
 var train_scene: PackedScene = preload("res://Characters/Train/train.tscn")
 
 var room_scene: PackedScene = preload("res://Environment/Room/room.tscn")
-var special_room_scene: PackedScene = preload("res://Environment/SpecialRoom.tscn")
+var special_room_scene: PackedScene = preload("res://Environment/SpecialRoom/SpecialRoom.tscn")
 var player_train: Train
 
 # Current Room variables
