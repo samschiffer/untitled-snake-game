@@ -2,7 +2,7 @@ extends Node
 
 @onready var room: Room
 
-var special_room_scene: PackedScene = preload("res://Environment/SpecialRoom.tscn")
+var special_room_scene: PackedScene = preload("res://Environment/SpecialRoom/SpecialRoom.tscn")
 var pickup_scene: PackedScene = preload("res://Objects/Pickup/pickup.tscn")
 var camera_buffer = 200
 

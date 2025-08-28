@@ -133,13 +133,20 @@ func _on_locomotive_collect_pickup() -> void:
 
 
 func _on_locomotive_collect_weapon_pickup() -> void:
-	spawn_train("gun")
+	make_next_car_gun()
 
 
 func _on_locomotive_collect_health_pickup() -> void:
 	health += 5
 	health = clamp(health, 0, max_health)
 	health_changed.emit()
+
+
+func make_next_car_gun():
+	for train in train_cars:
+		if train.type != "gun":
+			train.type = "gun"
+			break
 
 
 func lose_back_car():

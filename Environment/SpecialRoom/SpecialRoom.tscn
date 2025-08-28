@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d355kqx68ttdw"]
 
 [ext_resource type="Script" uid="uid://ervypuuy1egs" path="res://Environment/SpecialRoom/special_room.gd" id="1_4ii3t"]
-[ext_resource type="PackedScene" uid="uid://cpw3x3dqo7mx7" path="res://Environment/Door/Door.tscn" id="2_ll1vx"]
+[ext_resource type="PackedScene" uid="uid://do647nxhfosj6" path="res://Environment/Door/Door.tscn" id="2_ll1vx"]
 [ext_resource type="PackedScene" uid="uid://dgvaaghik8aup" path="res://Environment/wall.tscn" id="3_e7f6g"]
 
 [node name="SpecialRoom" type="Area2D" node_paths=PackedStringArray("door_top", "door_right", "door_bottom", "door_left", "entry_top", "entry_right", "entry_bottom", "entry_left", "floor")]
