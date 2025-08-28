@@ -6,6 +6,19 @@ signal train_entered_room(train: Train)
 
 @onready var bounding_box
 
+@export var door_top: Door
+@export var door_right: Door
+@export var door_bottom: Door
+@export var door_left: Door
+
+@export var entry_top: Marker2D
+@export var entry_right: Marker2D
+@export var entry_bottom: Marker2D
+@export var entry_left: Marker2D
+
+@export var floor: Polygon2D
+
+
 # Entering and leaving variables
 var leaving_train: Train
 var entering_train: Train
@@ -19,6 +32,7 @@ var train_entered: bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_bounding_box()
+	connect_door_signals()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,6 +48,24 @@ func _process(delta: float) -> void:
 			train_entered_room.emit(entering_train)
 			train_entered = true
 			check_for_train_entering = false
+
+
+func connect_door_signals():
+	# Top Door Signals
+	door_top.object_entered.connect(_on_door_top_object_entered)
+	door_top.object_exited.connect(_on_door_top_object_exited)
+	
+	# Right Door Signals
+	door_right.object_entered.connect(_on_door_right_object_entered)
+	door_right.object_exited.connect(_on_door_right_object_exited)
+	
+	# Bottom Door Signals
+	door_bottom.object_entered.connect(_on_door_bottom_object_entered)
+	door_bottom.object_exited.connect(_on_door_bottom_object_exited)
+	
+	# Left Door Signals
+	door_left.object_entered.connect(_on_door_left_object_entered)
+	door_left.object_exited.connect(_on_door_left_object_exited)
 
 
 func get_bounding_box():
@@ -79,119 +111,101 @@ func check_for_train_entered(train: Train):
 	entering_train = train
 	train_entered = false
 	check_for_train_entering = true
-	
-	
+
+## Closing or opening doors
+
+func close_all_doors_for(body: Node):
+	door_bottom.close_for(body)
+	door_right.close_for(body)
+	door_top.close_for(body)
+	door_left.close_for(body)
+
+
+func open_all_doors_for(body: Node):
+	door_bottom.open_for(body)
+	door_right.open_for(body)
+	door_top.open_for(body)
+	door_left.open_for(body)
+
+
 ########################
 ## Handle Exit Actions
 ########################
 
 ## Top Exit
-func _on_exit_top_body_entered(body: Node2D) -> void:
-	if body.position.y > $ExitTop.position.y and body is Locomotive:
-		body.hide()
+func _on_door_top_object_entered(node: Node) -> void:
+	node.show()
+	check_for_train_leaving = false
+	train_left = false
+
+
+func _on_door_top_object_exited(node: Node) -> void:
+	node.hide()
+	if node is Locomotive:
+		# Handle leaving train checks
 		check_for_train_leaving = true
-		leaving_train = body.get_parent()
+		leaving_train = node.get_parent()
 		train_leave_direction = "top"
-	else: 
-		body.show()
-		check_for_train_leaving = false
-
-
-func _on_exit_top_area_entered(area: Area2D) -> void:
-	if area.position.y > $ExitTop.position.y and area is TrainCar:
-		area.hide()
-	else: 
-		area.show()
-
-
-func _on_exit_top_body_exited(body: Node2D) -> void:
-	if body is Locomotive and body.position.y < $ExitTop.position.y:
-		body.movement_locked = true
-		body.rotation = 0
-		body.speed = max(200, body.speed)
-	else:
-		train_left = false
-
-
-## Left Exit
-func _on_exit_left_body_entered(body: Node2D) -> void:
-	if body.position.x > $ExitLeft.position.x and body is Locomotive:
-		body.hide()
-		check_for_train_leaving = true
-		leaving_train = body.get_parent()
-		train_leave_direction = "left"
-	else: 
-		body.show()
-		check_for_train_leaving = false
-
-
-func _on_exit_left_area_entered(area: Area2D) -> void:
-	if area.position.x > $ExitLeft.position.x and area is TrainCar:
-		area.hide()
-	else: 
-		area.show()
-
-
-func _on_exit_left_body_exited(body: Node2D) -> void:
-	if body is Locomotive and body.position.x < $ExitLeft.position.x:
-		body.movement_locked = true
-		body.rotation = 3 * PI / 2
-		body.speed = max(200, body.speed)
-	else:
-		train_left = false
-
-
-## Bottom Exit
-func _on_exit_bottom_body_entered(body: Node2D) -> void:
-	if body.position.y < $ExitBottom.position.y and body is Locomotive:
-		body.hide()
-		check_for_train_leaving = true
-		leaving_train = body.get_parent()
-		train_leave_direction = "bottom"
-	else: 
-		body.show()
-		check_for_train_leaving = false
-
-
-func _on_exit_bottom_area_entered(area: Area2D) -> void:
-	if area.position.y < $ExitBottom.position.y and area is TrainCar:
-		area.hide()
-	else: 
-		area.show()
-
-
-func _on_exit_bottom_body_exited(body: Node2D) -> void:
-	if body is Locomotive and body.position.y > $ExitBottom.position.y:
-		body.movement_locked = true
-		body.rotation = PI
-		body.speed = max(200, body.speed)
-	else:
-		train_left = false
+		# Lock movement of train out of room
+		node.movement_locked = true
+		node.rotation = 0
+		node.speed = max(200, node.speed)
 
 
 ## Right Exit
-func _on_exit_right_body_entered(body: Node2D) -> void:
-	if body.position.x < $ExitRight.position.x and body is Locomotive:
-		body.hide()
+func _on_door_right_object_entered(node: Node) -> void:
+	node.show()
+	check_for_train_leaving = false
+	train_left = false
+
+
+func _on_door_right_object_exited(node: Node) -> void:
+	node.hide()
+	if node is Locomotive:
+		# Handle leaving train checks
 		check_for_train_leaving = true
-		leaving_train = body.get_parent()
+		leaving_train = node.get_parent()
 		train_leave_direction = "right"
-	else: 
-		body.show()
-		check_for_train_leaving = false
+		# Lock movement of train out of room
+		node.movement_locked = true
+		node.rotation = PI / 2
+		node.speed = max(200, node.speed)
 
 
-func _on_exit_right_area_entered(area: Area2D) -> void:
-	if area.position.x < $ExitRight.position.x and area is TrainCar:
-		area.hide()
-	else: 
-		area.show()
+## Bottom Exit
+func _on_door_bottom_object_entered(node: Node) -> void:
+	node.show()
+	check_for_train_leaving = false
+	train_left = false
 
 
-func _on_exit_right_body_exited(body: Node2D) -> void:
-	if body is Locomotive and body.position.x > $ExitRight.position.x:
-		body.movement_locked = true
-		body.rotation = PI / 2
-		body.speed = max(200, body.speed)
-	else:
-		train_left = false
+func _on_door_bottom_object_exited(node: Node) -> void:
+	node.hide()
+	if node is Locomotive:
+		# Handle leaving train checks
+		check_for_train_leaving = true
+		leaving_train = node.get_parent()
+		train_leave_direction = "bottom"
+		# Lock movement of train out of room
+		node.movement_locked = true
+		node.rotation = PI
+		node.speed = max(200, node.speed)
+
+
+## Left Exit
+func _on_door_left_object_entered(node: Node) -> void:
+	node.show()
+	check_for_train_leaving = false
+	train_left = false
+	
+func _on_door_left_object_exited(node: Node) -> void:
+	node.hide()
+	if node is Locomotive:
+		# Handle leaving train checks
+		check_for_train_leaving = true
+		leaving_train = node.get_parent()
+		train_leave_direction = "left"
+		# Lock movement of train out of room
+		node.movement_locked = true
+		node.rotation = 3 * PI / 2
+		node.speed = max(200, node.speed)
