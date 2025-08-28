@@ -11,7 +11,7 @@ size = Vector2(1, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bsoq"]
 size = Vector2(1, 1)
 
-[node name="NewDoor" type="Node2D"]
+[node name="Door" type="Node2D"]
 script = ExtResource("1_kcu0o")
 
 [node name="Outside" type="Area2D" parent="."]
@@ -42,7 +42,7 @@ shape = SubResource("RectangleShape2D_ec3f1")
 
 [node name="Polygon2D" type="Polygon2D" parent="PhysicalDoor"]
 scale = Vector2(0.111111, 0.5)
-color = Color(0.4, 0.2416, 0.048, 1)
+color = Color(0.8, 0, 0, 1)
 polygon = PackedVector2Array(0, 2, 9, 2, 9, 4, 0, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicalDoor"]
