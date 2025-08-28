@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dif2hvxsnybw2" path="res://Environment/Room/room.gd" id="1_jnxyn"]
 [ext_resource type="PackedScene" uid="uid://dgvaaghik8aup" path="res://Environment/wall.tscn" id="2_53bd7"]
-[ext_resource type="PackedScene" uid="uid://cpw3x3dqo7mx7" path="res://Environment/Door/Door.tscn" id="3_53bd7"]
+[ext_resource type="PackedScene" uid="uid://do647nxhfosj6" path="res://Environment/Door/Door.tscn" id="3_53bd7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_53bd7"]
 size = Vector2(1960, 1461)
